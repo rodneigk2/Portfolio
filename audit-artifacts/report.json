@@ -1,0 +1,536 @@
+[
+  {
+    "viewport": {
+      "name": "mobile-375",
+      "width": 375,
+      "height": 812
+    },
+    "title": "Rodnei Rodrigo | Frontend, Python e Dashboards",
+    "bodyScrollWidth": 375,
+    "docScrollWidth": 375,
+    "viewportWidth": 375,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 16,
+        "right": 359,
+        "width": 343,
+        "scrollWidth": 412,
+        "clientWidth": 341,
+        "text": "FrontendJavaScript, HTML e CSS com foco em detalhes.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 16,
+        "right": 359,
+        "width": 343,
+        "scrollWidth": 412,
+        "clientWidth": 341,
+        "text": "BackendPython, regras de negocio e APIs organizadas.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 37,
+        "right": 338,
+        "width": 301,
+        "scrollWidth": 363,
+        "clientWidth": 299,
+        "text": "Visualmais claro",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 37,
+        "right": 338,
+        "width": 301,
+        "scrollWidth": 363,
+        "clientWidth": 299,
+        "text": "Fluxomais simples",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-5",
+        "left": 41,
+        "right": 334,
+        "width": 293,
+        "scrollWidth": 353,
+        "clientWidth": 291,
+        "text": "01Interface, logica e dados precisam conversar bem.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-5",
+        "left": 41,
+        "right": 334,
+        "width": 293,
+        "scrollWidth": 353,
+        "clientWidth": 291,
+        "text": "02O foco e entregar algo bonito, claro e util.",
+        "display": "block",
+        "overflowX": "hidden"
+      }
+    ],
+    "hero": {
+      "width": 375,
+      "height": 1878.453125
+    }
+  },
+  {
+    "viewport": {
+      "name": "mobile-390",
+      "width": 390,
+      "height": 844
+    },
+    "title": "Rodnei Rodrigo | Frontend, Python e Dashboards",
+    "bodyScrollWidth": 390,
+    "docScrollWidth": 390,
+    "viewportWidth": 390,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 16,
+        "right": 374,
+        "width": 358,
+        "scrollWidth": 430,
+        "clientWidth": 356,
+        "text": "FrontendJavaScript, HTML e CSS com foco em detalhes.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 16,
+        "right": 374,
+        "width": 358,
+        "scrollWidth": 430,
+        "clientWidth": 356,
+        "text": "BackendPython, regras de negocio e APIs organizadas.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 37,
+        "right": 353,
+        "width": 316,
+        "scrollWidth": 380,
+        "clientWidth": 314,
+        "text": "Visualmais claro",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 37,
+        "right": 353,
+        "width": 316,
+        "scrollWidth": 380,
+        "clientWidth": 314,
+        "text": "Fluxomais simples",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-5",
+        "left": 41,
+        "right": 349,
+        "width": 308,
+        "scrollWidth": 371,
+        "clientWidth": 306,
+        "text": "01Interface, logica e dados precisam conversar bem.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-5",
+        "left": 41,
+        "right": 349,
+        "width": 308,
+        "scrollWidth": 371,
+        "clientWidth": 306,
+        "text": "02O foco e entregar algo bonito, claro e util.",
+        "display": "block",
+        "overflowX": "hidden"
+      }
+    ],
+    "hero": {
+      "width": 390,
+      "height": 1884.640625
+    }
+  },
+  {
+    "viewport": {
+      "name": "tablet-768",
+      "width": 768,
+      "height": 1024
+    },
+    "title": "Rodnei Rodrigo | Frontend, Python e Dashboards",
+    "bodyScrollWidth": 768,
+    "docScrollWidth": 768,
+    "viewportWidth": 768,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 24,
+        "right": 378,
+        "width": 354,
+        "scrollWidth": 425,
+        "clientWidth": 352,
+        "text": "FrontendJavaScript, HTML e CSS com foco em detalhes.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 390,
+        "right": 744,
+        "width": 354,
+        "scrollWidth": 425,
+        "clientWidth": 352,
+        "text": "BackendPython, regras de negocio e APIs organizadas.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 49,
+        "right": 376,
+        "width": 327,
+        "scrollWidth": 393,
+        "clientWidth": 325,
+        "text": "Visualmais claro",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 392,
+        "right": 719,
+        "width": 327,
+        "scrollWidth": 393,
+        "clientWidth": 325,
+        "text": "Fluxomais simples",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-5",
+        "left": 53,
+        "right": 376,
+        "width": 323,
+        "scrollWidth": 389,
+        "clientWidth": 321,
+        "text": "01Interface, logica e dados precisam conversar bem.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-5",
+        "left": 392,
+        "right": 715,
+        "width": 323,
+        "scrollWidth": 389,
+        "clientWidth": 321,
+        "text": "02O foco e entregar algo bonito, claro e util.",
+        "display": "block",
+        "overflowX": "hidden"
+      }
+    ],
+    "hero": {
+      "width": 768,
+      "height": 1369.9375
+    }
+  },
+  {
+    "viewport": {
+      "name": "small-laptop-1024",
+      "width": 1024,
+      "height": 768
+    },
+    "title": "Rodnei Rodrigo | Frontend, Python e Dashboards",
+    "bodyScrollWidth": 1024,
+    "docScrollWidth": 1024,
+    "viewportWidth": 1024,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 32,
+        "right": 267.484375,
+        "width": 235.484375,
+        "scrollWidth": 286,
+        "clientWidth": 233,
+        "text": "FrontendJavaScript, HTML e CSS com foco em detalhes.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 279.484375,
+        "right": 514.984375,
+        "width": 235.5,
+        "scrollWidth": 286,
+        "clientWidth": 234,
+        "text": "BackendPython, regras de negocio e APIs organizadas.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 57,
+        "right": 504,
+        "width": 447,
+        "scrollWidth": 534,
+        "clientWidth": 445,
+        "text": "Visualmais claro",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 520,
+        "right": 967,
+        "width": 447,
+        "scrollWidth": 534,
+        "clientWidth": 445,
+        "text": "Fluxomais simples",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-5",
+        "left": 61,
+        "right": 504,
+        "width": 443,
+        "scrollWidth": 529,
+        "clientWidth": 441,
+        "text": "01Interface, logica e dados precisam conversar bem.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-5",
+        "left": 520,
+        "right": 963,
+        "width": 443,
+        "scrollWidth": 529,
+        "clientWidth": 441,
+        "text": "02O foco e entregar algo bonito, claro e util.",
+        "display": "block",
+        "overflowX": "hidden"
+      }
+    ],
+    "hero": {
+      "width": 1024,
+      "height": 824.03125
+    }
+  },
+  {
+    "viewport": {
+      "name": "desktop-1280",
+      "width": 1280,
+      "height": 800
+    },
+    "title": "Rodnei Rodrigo | Frontend, Python e Dashboards",
+    "bodyScrollWidth": 1280,
+    "docScrollWidth": 1280,
+    "viewportWidth": 1280,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 64,
+        "right": 349.890625,
+        "width": 285.890625,
+        "scrollWidth": 345,
+        "clientWidth": 284,
+        "text": "FrontendJavaScript, HTML e CSS com foco em detalhes.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 361.890625,
+        "right": 647.796875,
+        "width": 285.90625,
+        "scrollWidth": 345,
+        "clientWidth": 284,
+        "text": "BackendPython, regras de negocio e APIs organizadas.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 89,
+        "right": 353.140625,
+        "width": 264.140625,
+        "scrollWidth": 320,
+        "clientWidth": 262,
+        "text": "Visualmais claro",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 369.140625,
+        "right": 633.296875,
+        "width": 264.15625,
+        "scrollWidth": 320,
+        "clientWidth": 262,
+        "text": "Fluxomais simples",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-5",
+        "left": 93,
+        "right": 311.59375,
+        "width": 218.59375,
+        "scrollWidth": 266,
+        "clientWidth": 217,
+        "text": "01Interface, logica e dados precisam conversar bem.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-5",
+        "left": 327.59375,
+        "right": 546.1875,
+        "width": 218.59375,
+        "scrollWidth": 266,
+        "clientWidth": 217,
+        "text": "02O foco e entregar algo bonito, claro e util.",
+        "display": "block",
+        "overflowX": "hidden"
+      }
+    ],
+    "hero": {
+      "width": 1280,
+      "height": 829.65625
+    }
+  },
+  {
+    "viewport": {
+      "name": "desktop-1440",
+      "width": 1440,
+      "height": 900
+    },
+    "title": "Rodnei Rodrigo | Frontend, Python e Dashboards",
+    "bodyScrollWidth": 1440,
+    "docScrollWidth": 1440,
+    "viewportWidth": 1440,
+    "overflow": [
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 144,
+        "right": 429.890625,
+        "width": 285.890625,
+        "scrollWidth": 345,
+        "clientWidth": 284,
+        "text": "FrontendJavaScript, HTML e CSS com foco em detalhes.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 441.890625,
+        "right": 727.796875,
+        "width": 285.90625,
+        "scrollWidth": 345,
+        "clientWidth": 284,
+        "text": "BackendPython, regras de negocio e APIs organizadas.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 169,
+        "right": 433.140625,
+        "width": 264.140625,
+        "scrollWidth": 320,
+        "clientWidth": 262,
+        "text": "Visualmais claro",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-4",
+        "left": 449.140625,
+        "right": 713.296875,
+        "width": 264.15625,
+        "scrollWidth": 320,
+        "clientWidth": 262,
+        "text": "Fluxomais simples",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-5",
+        "left": 173,
+        "right": 391.59375,
+        "width": 218.59375,
+        "scrollWidth": 266,
+        "clientWidth": 217,
+        "text": "01Interface, logica e dados precisam conversar bem.",
+        "display": "block",
+        "overflowX": "hidden"
+      },
+      {
+        "tag": "DIV",
+        "className": "angled-panel p-5",
+        "left": 407.59375,
+        "right": 626.1875,
+        "width": 218.59375,
+        "scrollWidth": 266,
+        "clientWidth": 217,
+        "text": "02O foco e entregar algo bonito, claro e util.",
+        "display": "block",
+        "overflowX": "hidden"
+      }
+    ],
+    "hero": {
+      "width": 1440,
+      "height": 837.65625
+    }
+  }
+]
