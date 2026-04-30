@@ -14,7 +14,7 @@ export default function Home() {
         <div className="glass-panel hidden h-24 items-center justify-between rounded-[2rem] px-8 lg:flex">
           <div>
             <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.25em] text-white/40">
-              Portfolio - v2.0
+              Desenvolvedor
             </p>
             <p className="mt-1 font-display text-xl font-bold">
               Rodnei Rodrigo - Fullstack, Dados e Produto

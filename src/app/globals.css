@@ -334,6 +334,9 @@ body.is-programmatic-scrolling .screen-frame {
 }
 
 
+.btn-gradient svg {
+  color: #f4f8fb99 !important;
+}
 .btn-gradient:hover svg,
 .btn-outline:hover svg {
   transform: translateX(0.75px);
