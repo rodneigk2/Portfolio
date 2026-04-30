@@ -4,6 +4,8 @@ import { BarChart3, CheckCircle2, Maximize2, Play, ShieldCheck } from "lucide-re
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+  // Detecta se é mobile (user agent simples)
+  const isMobile = typeof window !== 'undefined' && /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 import { fadeInUp, stagger } from "./motionPresets";
 
 const results = [
@@ -317,7 +319,7 @@ export default function Projects() {
             ref={mediaRef}
             className="relative flex min-h-[320px] items-center justify-center overflow-hidden rounded-[1.6rem] border border-white/10 bg-black/45"
           >
-            {activePreview.type === "image" && (
+            {activePreview.type === "image" && !isMobile && (
               <>
                 {!isFullscreen ? (
                   <button
