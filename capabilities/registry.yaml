@@ -1,0 +1,48 @@
+id: capability_registry
+type: capability_registry
+version: 0.9.0
+purpose: project_capabilities_available_to_the_agent
+policy:
+  default_available: false
+  runtime_availability_must_be_verified: true
+capabilities:
+  - id: local_search
+    type: local_tool
+    available: true
+    tags: [code_search, file_discovery]
+    operations: [read]
+    cost: {tokens: low, latency: low}
+    side_effect: none
+    confirmation: never
+  - id: local_files
+    type: local_tool
+    available: true
+    tags: [file_read, file_write]
+    operations: [read, write]
+    cost: {tokens: low, latency: low}
+    side_effect: local_write
+    confirmation: risk_based
+  - id: focused_skill
+    type: skill
+    available: runtime
+    tags: [domain_guidance]
+    operations: [read]
+    cost: {tokens: medium, latency: low}
+    side_effect: none
+    confirmation: never
+  - id: targeted_mcp
+    type: mcp
+    available: runtime
+    tags: [external_context, remote_operation]
+    operations: [read, write]
+    cost: {tokens: medium, latency: medium}
+    side_effect: remote_write
+    confirmation: operation_based
+  - id: publish_service
+    type: remote_service
+    available: runtime
+    tags: [publish]
+    operations: [publish]
+    cost: {tokens: low, latency: medium}
+    side_effect: publish
+    confirmation: always

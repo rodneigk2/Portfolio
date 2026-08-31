@@ -1,0 +1,55 @@
+id: selective_validation
+type: operational_rules
+version: 0.9.0
+purpose: run_smallest_validation_set_that_proves_the_change
+principle: validation_scales_with_behavior_and_blast_radius
+selection:
+  docs_only:
+    run:
+      - link_check
+      - text_search
+      - schema_if_structured
+  protocol_rule:
+    run:
+      - schema_validation
+      - mirror_sync
+      - framework_targeted_tests
+  parser_or_evaluator:
+    run:
+      - parser_adversarial_tests
+      - framework_tests
+      - benchmark_runner
+  installer_or_package:
+    run:
+      - install_test
+      - verify_install
+      - package_content_version_check
+      - package_dry_run
+  host_or_mcp_setup:
+    run:
+      - host_readiness_check
+      - host_setup_check
+      - host_doctor
+  shared_or_cross_module:
+    run:
+      - framework_tests
+      - health_check
+  release:
+    run:
+      - framework_tests
+      - schema_strict
+      - health_check
+      - public_release_readiness_check
+      - package_content_version_check
+      - npm_dry_run
+      - python_build
+      - twine_check
+rules:
+  - infer_validation_from_changed_files_and_behavior
+  - expand_validation_when_shared_contract_changes
+  - never_claim_unrun_validation
+  - full_health_check_is_not_required_for_every_small_change
+  - user_visible_or_critical_change_requires_manual_test_guidance
+  - every_publish_requires_current_public_docs_and_description_validation
+  - every_publish_requires_package_content_version_validation
+  - host_or_mcp_setup_requires_readiness_check_before_claiming_active

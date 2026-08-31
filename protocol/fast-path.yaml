@@ -1,0 +1,72 @@
+id: fast_path
+type: agent_entrypoint
+version: 0.9.0
+purpose: minimum_rules_to_start_any_task
+read_next_minimum:
+  - route-pack-index.yaml
+  - selected_route_block_from_route-packs.yaml
+read_conditionally:
+  router:
+    when:
+      - pack_insufficient_or_exact_file_list_needed
+    files:
+      - router.yaml
+  context_budget:
+    when:
+      - expansion_or_budget_uncertainty_exists
+    files:
+      - context-budget.yaml
+  capabilities:
+    when:
+      - skill_mcp_optional_tool_remote_or_side_effect_is_needed
+    files:
+      - capability-router.yaml
+      - capability-gate.yaml
+      - enforcement-gateway.yaml
+  intelligence:
+    when:
+      - model_choice_or_reasoning_effort_is_nontrivial
+    files:
+      - intelligence-router.yaml
+  mode:
+    when:
+      - user_requests_fast_balanced_or_strict
+      - default_mode_is_unclear
+    files:
+      - modes.yaml
+core_rules:
+  - complete_pending_host_onboarding_before_first_contact_response
+  - classify_risk_before_action
+  - read_route_index_then_selected_pack_before_full_route_files
+  - use_minimum_sufficient_context_and_stop_when_enough
+  - use_status_version_fast_lane_for_simple_update_or_push_questions
+  - do_not_escalate_version_status_checks_without_drift_or_explicit_full_scan
+  - do_not_edit_unmapped_file
+  - raise_level_when_risk_appears
+  - confirm_before_level_3_sensitive_action
+  - deliver_changed_validated_not_validated_residual_risk
+  - show_original_and_improved_prompt_when_technical_interpreted_or_level_1_plus
+  - allow_direct_level_0_answer_when_prompt_comparison_adds_no_clarity
+  - use_context_compiler_when_context_or_history_is_large
+  - use_only_matching_memory_subjects
+  - run_onboarding_compliance_only_when_host_adherence_is_suspect
+  - read_host_installation_readiness_before_codex_vscode_mcp_or_host_setup_claims
+  - use_selective_validation_by_blast_radius
+  - select_capability_route_only_when_skill_mcp_or_optional_tool_is_needed
+  - require_capability_plan_before_skill_mcp_or_remote_tool_use
+  - use_enforcement_gateway_for_level_2_or_3_tool_or_side_effect_when_available
+  - choose_intelligence_level_proportional_to_risk_and_complexity
+  - follow_behavioral_execution_contract
+  - block_publish_until_public_docs_and_descriptions_are_verified_current
+  - block_publish_until_package_cli_templates_and_distributed_yaml_versions_match
+risk_short:
+  level_0: answer_only
+  level_1: small_clear_reversible_isolated_change
+  level_2: user_flow_ambiguity_multiple_files_or_regression_risk
+  level_3: data_security_auth_database_deploy_production_secret_or_destructive
+file_policy:
+  max_lines: 400
+  split_when_near_limit: true
+  prefer_snippets_over_full_files: true
+stop_reading_when:
+  - enough_context_to_act_safely

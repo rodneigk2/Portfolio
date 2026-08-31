@@ -1,0 +1,105 @@
+id: risk_levels
+type: risk_matrix
+version: 0.9.0
+levels:
+  level_0:
+    name: simple_answer
+    requires_mapping: false
+    requires_confirmation: false
+    when:
+      all:
+        - no_file_change
+        - no_sensitive_action
+    do:
+      - answer_directly
+  level_1:
+    name: fast_path
+    requires_mapping: minimal
+    requires_confirmation: false
+    when:
+      all:
+        - clear_task
+        - small_change
+        - reversible
+        - isolated
+        - direct_validation
+    do:
+      - read_focused_context
+      - change_minimum_needed
+      - validate_simple
+  level_2:
+    name: impact_map
+    requires_mapping: true
+    requires_confirmation: false
+    when:
+      any:
+        - user_visible_impact
+        - ambiguity
+        - multiple_files
+        - regression_risk
+        - relevant_behavior_change
+    do:
+      - map_objective_area_files_risks_plan_validation
+      - execute_smallest_safe_change
+      - validate_main_flow
+  level_3:
+    name: critical_map
+    requires_mapping: critical
+    requires_confirmation: true
+    when:
+      any:
+        - real_data
+        - database
+        - authentication
+        - authorization
+        - security
+        - secrets
+        - deploy
+        - production
+        - critical_integration
+        - destructive_command
+    do:
+      - map_critical_risk
+      - ask_confirmation_before_sensitive_action
+      - validate_before_and_after
+escalation:
+  rule: raise_level_when_new_risk_evidence_appears
+  never: lower_level_by_ignoring_known_risk
+proportional_classification:
+  principle: start_with_lowest_safe_level_and_escalate_only_with_evidence
+  do:
+    - classify_the_user_request_before_reading_large_context
+    - keep_scope_small_when_task_is_clear_and_reversible
+    - escalate_when_new_risk_evidence_appears
+    - classify_split_subtasks_by_their_own_executable_scope
+  avoid:
+    - treating_every_multi_step_task_as_level_3
+    - loading_critical_context_before_critical_risk_is_evident
+    - downgrading_known_risk_to_save_tokens
+  escalation_triggers:
+    - real_data_or_customer_data
+    - auth_or_permission_change
+    - database_or_destructive_command
+    - deploy_or_production_change
+    - secrets_or_tokens
+    - unclear_impact_on_existing_flow
+blocked_critical_scope:
+  principle: do_not_lower_original_risk_because_sensitive_action_is_blocked
+  when:
+    all:
+      - level_3_was_identified
+      - critical_action_cannot_be_executed
+  do:
+    - keep_original_task_marked_level_3
+    - mark_critical_action_as_blocked_or_pending
+    - split_safe_subtasks_when_useful
+    - classify_each_safe_subtask_by_its_own_scope
+    - read_only_context_needed_for_the_executable_subtask
+    - report_blocked_level_3_part_in_delivery
+  allow_lower_scope_only_when:
+    - critical_action_is_explicitly_removed_from_scope
+    - new_evidence_proves_critical_risk_does_not_apply
+  avoid:
+    - lowering_risk_to_save_tokens
+    - treating_blocked_action_as_completed
+    - hiding_residual_critical_risk

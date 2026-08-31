@@ -1,0 +1,53 @@
+id: spec_driven
+type: operational_rules
+version: 0.9.0
+purpose: use_spec_driven_only_when_it_improves_safety_or_clarity
+principle: protocol_is_base_spec_is_tool
+when_to_use:
+  - feature_with_multiple_steps
+  - unclear_scope_with_real_implementation
+  - level_2_change_with_cross_file_impact
+  - level_3_change_before_sensitive_action
+  - user_requests_spec_or_roadmap
+when_not_to_use:
+  - simple_answer
+  - tiny_reversible_fix
+  - clear_low_risk_change
+  - user_only_wants_quick_explanation
+spec_levels:
+  light_spec:
+    use_when:
+      - level_1_or_2
+      - small_feature_or_bug
+    max_lines: 12
+    fields:
+      - objective
+      - scope
+      - affected_area
+      - validation
+  full_spec:
+    use_when:
+      - level_2_large
+      - level_3
+      - multi_module_change
+    max_lines: 40
+    fields:
+      - objective
+      - non_goals
+      - assumptions
+      - affected_area
+      - risk
+      - implementation_steps
+      - validation
+      - rollback_or_recovery
+rules:
+  - keep_spec_shorter_than_context_it_saves
+  - do_not_create_spec_for_low_value_tasks
+  - use_spec_to_reduce_ambiguity_not_to_delay_execution
+  - after_spec_execute_with_fast_path_router_and_validation
+  - update_spec_only_when_scope_changes
+delivery:
+  include:
+    - spec_used_or_skipped
+    - reason
+    - validation_result

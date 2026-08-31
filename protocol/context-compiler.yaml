@@ -1,0 +1,159 @@
+id: context_compiler
+type: operational_rules
+version: 0.9.0
+purpose: build_minimum_context_package_before_model_reasoning
+principle: conversation_is_interface_not_source_of_truth
+canonical_state:
+  canonical_bootstrap:
+    - AGENTS.md
+    - INDEX.yaml
+    - config.yaml
+    - protocol/fast-path.yaml
+    - protocol/router.yaml
+    - protocol/route-packs.yaml
+  read_conditionally:
+    project_truth_or_domain_mapping:
+      - canonical-state.yaml
+      - context-map.yaml
+    matching_memory:
+      - memory/INDEX.yaml
+  active_truth:
+    - current_user_request
+    - installed_protocol_block
+    - current_project_index
+    - current_config
+    - current_files_verified_this_turn
+  historical_only:
+    - old_chat_messages
+    - generated_reports
+    - archived_results
+    - revoked_or_replaced_decisions
+context_build:
+  input:
+    - user_request
+    - route_from_router
+    - risk_level
+    - context_budget
+    - candidate_files_or_areas
+    - matching_memory_subjects
+    - recent_validated_state
+  output:
+    - objective
+    - constraints
+    - relevant_rules
+    - matching_memory
+    - candidate_files
+    - estimated_tokens
+    - budget_status
+    - validation_plan
+    - excluded_context
+selection_policy:
+  include:
+    - context_map_domain_when_available
+    - active_decisions_for_matched_domain
+    - active_memory_matching_subject_and_scope
+    - files_required_by_route
+    - snippets_matching_task_terms
+    - current_decisions_touching_candidate_area
+    - framework_configs_when_task_touches_framework
+  exclude:
+    - unrelated_docs
+    - old_generated_reports
+    - full_logs_without_error_focus
+    - revoked_decisions_unless_comparing_history
+    - entire_large_files_when_snippet_is_enough
+    - candidate_or_archived_memory_without_task_match
+memory_layers:
+  active:
+    definition: required_to_complete_current_task
+    token_policy: keep_in_context
+  archived:
+    definition: useful_only_if_evidence_matches_task
+    token_policy: retrieve_only_on_need
+  revoked:
+    definition: no_longer_valid_decision
+    token_policy: never_treat_as_current_truth
+decision_rules:
+  - id: CTX_001
+    when: decision_has_status_revoked_or_replaced
+    do:
+      - use_only_to_explain_history
+      - prefer_replacement_decision
+    avoid:
+      - treating_as_current_instruction
+  - id: CTX_002
+    when: context_is_large
+    do:
+      - search_before_reading
+      - read_snippets_before_full_files
+      - stop_when_validation_plan_is_clear
+  - id: CTX_003
+    when: task_crosses_multiple_domains
+    do:
+      - build_context_by_domain
+      - include_only_domain_interfaces
+      - avoid_loading_all_domains
+  - id: CTX_004
+    when: context_gap_blocks_safe_execution
+    do:
+      - ask_one_short_question_or_read_next_mapped_file
+  - id: CTX_005
+    when: alias_or_snippet_seems_sufficient
+    do:
+      - verify_against_current_file_state_before_editing
+      - escalate_to_full_file_when_imports_types_or_side_effects_matter
+    avoid:
+      - treating_alias_as_source_of_truth
+      - editing_from_snippet_when_behavior_depends_on_unread_context
+  - id: CTX_006
+    when: persistent_memory_may_be_relevant
+    do:
+      - read_memory_index_first
+      - retrieve_only_matching_active_entries
+      - verify_project_state_against_current_files
+    avoid:
+      - loading_all_memory
+      - treating_candidate_memory_as_authoritative
+  - id: CTX_007
+    when: initial_context_budget_is_reached
+    do:
+      - stop_if_objective_target_and_validation_are_clear
+      - expand_only_for_unresolved_risk_dependency_scope_or_validation_gap
+      - record_expansion_reason
+retrieval_tiers:
+  mvp:
+    use:
+      - canonical-state.yaml
+      - context-map.yaml
+      - INDEX.yaml
+      - router.yaml
+      - targeted_search
+      - file_snippets
+      - handoff_summary
+  advanced:
+    use_when:
+      - thousands_of_files
+      - repeated_cross_session_work
+      - semantic_search_needed
+    options:
+      - decision_log
+      - lightweight_knowledge_graph
+      - semantic_cache
+      - vector_search
+  avoid_initially:
+    - mandatory_vector_database_for_small_projects
+    - sending_raw_project_state_to_model
+    - building_global_graph_before_real_need
+delivery:
+  include_when_relevant:
+    - context_used
+    - context_excluded
+    - context_budget_status
+    - reason_for_not_reading_more
+economy_goal:
+  target: reduce_unneeded_context_up_to_90_percent_when_safe
+  never_trade_off:
+    - correctness
+    - security
+    - validation
+    - risk_classification

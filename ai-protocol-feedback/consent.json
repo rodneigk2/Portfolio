@@ -1,0 +1,29 @@
+{
+  "status": "accepted",
+  "local_collection": true,
+  "local_framework_return": true,
+  "framework_root": "C:\\Users\\UsuarioPc\\AppData\\Roaming\\npm\\node_modules\\ai-execution-protocol",
+  "max_runs_per_protocol_version": 20,
+  "usage_by_protocol_version": {},
+  "limit_notified_versions": [],
+  "prepare_return_packages": false,
+  "remote_upload": false,
+  "decided_at": "2026-06-14T16:30:01+00:00",
+  "revocable": true,
+  "collected_fields": [
+    "user_request",
+    "improved_prompt",
+    "result_summary",
+    "validation_summary",
+    "error_category",
+    "user_feedback"
+  ],
+  "never_collected": [
+    "source_files",
+    "raw_diffs",
+    "environment_files",
+    "credentials",
+    "customer_data",
+    "full_logs"
+  ]
+}

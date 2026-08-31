@@ -1,0 +1,63 @@
+id: intelligence_router
+type: operational_rules
+version: 0.9.0
+purpose: choose_model_reasoning_and_effort_proportional_to_task_need
+principle: use_the_cheapest_sufficient_intelligence_without_trading_correctness
+levels:
+  minimal:
+    use_when:
+      - level_0_direct_answer
+      - no_current_external_data_needed
+      - no_file_change
+    model_need: low_cost_fast
+    reasoning_depth: low
+    tools: none
+  standard:
+    use_when:
+      - level_1_small_change
+      - focused_file_read
+      - simple_validation
+    model_need: default
+    reasoning_depth: medium
+    tools: local_only
+  deep:
+    use_when:
+      - level_2_flow_bug
+      - refactor
+      - ambiguous_impact
+      - failed_first_validation
+    model_need: stronger_or_more_reasoning
+    reasoning_depth: high
+    tools: selected_local_or_targeted_remote
+  critical:
+    use_when:
+      - level_3_data_auth_security_deploy_publish_destructive
+      - high_blast_radius
+      - irreversible_or_external_side_effect
+    model_need: strongest_available_for_task
+    reasoning_depth: high_with_audit
+    tools: least_privilege_confirmed
+escalate_when:
+  - risk_level_increases
+  - ambiguity_blocks_safe_action
+  - validation_fails
+  - context_conflict_detected
+  - external_current_data_is_required
+  - specialized_modality_is_required
+deescalate_when:
+  - task_is_direct_answer
+  - no_code_or_external_state_needed
+  - validation_plan_is_trivial
+  - previous_high_risk_assumption_is_not_supported_by_evidence
+never_trade:
+  - security
+  - correctness
+  - required_validation
+  - explicit_user_scope
+delivery:
+  include_when_level_2_or_3:
+    - intelligence_level
+    - escalation_reason_if_any
+    - why_lower_level_was_not_enough
+  omit_for_level_0:
+    - model_discussion_unless_user_asks

@@ -1,0 +1,48 @@
+id: route_pack_index
+type: compact_route_index
+version: 0.9.0
+purpose: choose_route_without_opening_full_router_or_all_route_packs
+default_flow:
+  - classify_risk
+  - choose_matching_route_name
+  - read_only_selected_block_from_route-packs.yaml
+  - open_router.yaml_only_when_full_route_file_list_is_needed
+routes:
+  level_0:
+    - simple_answer
+    - status_version_check
+  level_1:
+    - small_fix
+    - docs_update
+    - public_artifact_review
+    - host_onboarding
+    - host_mcp_setup
+    - evaluate_response
+    - behavior_evaluation
+    - create_or_edit_yaml
+    - prompt_improvement
+    - context_optimization
+    - memory_update
+    - selective_validation
+    - dataset_preparation
+  level_2:
+    - user_flow_bug
+    - refactor
+    - feature_or_spec
+    - memory_conflict_or_replacement
+    - real_run_collection
+  level_3:
+    - database_or_data
+    - auth_security_secret
+    - deploy_or_production
+  adaptive:
+    - capability_selection
+    - enforcement_gateway
+    - runtime_adapter
+    - intelligence_selection
+    - cost_quality_optimization
+expand_to_router_when:
+  - selected_pack_is_insufficient
+  - exact_full_route_file_list_is_needed
+  - route_choice_is_ambiguous_after_index
+  - schema_or_generated_report_path_must_be_validated

@@ -1,0 +1,56 @@
+id: capability_gate
+type: operational_rules
+version: 0.9.0
+purpose: gate_capability_use_before_skill_mcp_or_tool_invocation
+principle: plan_before_use_audit_after_use
+guarantee_boundary:
+  framework_can:
+    - require_capability_plan_before_use
+    - mark_unplanned_use_as_protocol_failure
+    - compare_used_capabilities_with_selected_capabilities
+    - block_high_risk_workflow_when_plan_is_missing
+  host_must:
+    - hide_or_disable_tools_for_physical_enforcement
+    - enforce_runtime_permissions
+required_before_use:
+  - task_objective
+  - risk_level
+  - operation_scope
+  - requested_operations
+  - required_outcome_tags
+  - selected_capabilities
+  - confirmation_status_when_required
+allowed_states:
+  planned:
+    meaning: selected_but_not_invoked
+  used:
+    meaning: invoked_within_plan_and_scope
+  blocked:
+    meaning: needed_but_missing_or_unconfirmed
+  violation:
+    meaning: used_without_plan_or_outside_scope
+rules:
+  - no_skill_mcp_or_remote_tool_before_capability_plan
+  - local_read_can_be_implicit_only_for_level_0_or_1_basic_navigation
+  - level_2_or_3_requires_explicit_capability_plan
+  - publish_write_or_destructive_requires_confirmation_when_policy_requires
+  - used_capability_must_be_subset_of_selected_capabilities
+  - unplanned_use_is_protocol_failure
+  - missing_required_capability_blocks_high_risk_workflow
+audit:
+  compare:
+    - selected_capabilities
+    - used_capabilities
+    - operation_scope
+    - confirmation_status
+  fail_when:
+    - used_not_selected
+    - used_for_unapproved_operation
+    - used_after_blocked_status
+    - publish_without_confirmation
+delivery:
+  include_for_level_2_or_3:
+    - capability_plan_summary
+    - used_capabilities
+    - gate_status
+    - violations_if_any

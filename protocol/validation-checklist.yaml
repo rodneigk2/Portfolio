@@ -1,0 +1,98 @@
+id: validation_checklist
+type: checklist
+version: 0.9.0
+selection_source: protocol/selective-validation.yaml
+automatic_validation:
+  - unit_tests
+  - integration_tests
+  - typecheck
+  - build
+  - lint
+  - link_check
+  - diff_check
+manual_validation:
+  fields:
+    - where_to_test
+    - steps
+    - expected_result
+    - regression_signals
+  required_when:
+    - user_visible_impact
+    - regression_risk
+    - could_break_existing_flow
+    - validation_not_fully_automated
+delivery:
+  default_style: micro_when_low_risk
+  required_fields:
+    - changed
+    - validated
+    - residual_risk
+    - plain_language_summary
+  conditional_fields:
+    - prompt_original_when_technical_interpreted_or_level_1_plus
+    - prompt_melhorado_when_technical_interpreted_or_level_1_plus
+    - prompt_melhorado_names_action_target_success_validation_when_required
+    - prompt_melhorado_names_open_use_hints_when_risk_or_capability_requires
+    - not_validated_when_any_expected_validation_was_not_run
+    - tests_to_run_when_break_risk_exists
+  optional_fields:
+    - next_step
+rules:
+  - id: VAL_001
+    never: claim_tested_if_not_tested
+  - id: VAL_002
+    if_validation_not_possible:
+      - record_reason
+      - indicate_expected_test
+  - id: VAL_003
+    when:
+      any:
+        - could_break_existing_flow
+        - regression_risk
+        - user_visible_impact
+    do:
+      - provide_manual_test_list
+      - include_where_to_test_steps_expected_result
+  - id: VAL_004
+    always:
+      - explain_changes_in_plain_language
+      - avoid_unexplained_jargon
+      - make_limits_and_residual_risk_understandable
+      - prefer_one_line_per_delivery_field
+      - use_micro_format_only_when_readable
+  - id: VAL_005
+    always:
+      - select_smallest_validation_set_that_proves_behavior
+      - expand_when_shared_contract_or_blast_radius_requires
+      - record_every_expected_validation_not_run
+    avoid:
+      - full_health_check_for_trivial_local_change
+      - unrelated_expensive_validation
+  - id: VAL_006
+    when:
+      any:
+        - technical_action
+        - scope_interpretation
+        - risk_level_1_or_higher
+    do:
+      - show_original_and_improved_prompt_compactly
+      - ensure_improved_prompt_guides_action_target_scope_success_validation
+      - include_open_use_hints_only_when_they_reduce_risk_or_capability_ambiguity
+    otherwise:
+      - allow_direct_level_0_answer
+  - id: VAL_007
+    when: publish_or_release
+    do:
+      - verify_public_documentation_matches_current_behavior
+      - verify_public_descriptions_are_synchronized
+      - verify_changelog_release_notes_and_public_versions
+      - verify_package_cli_templates_and_distributed_yaml_versions
+      - block_publish_when_public_release_readiness_fails
+      - block_publish_when_package_content_version_check_fails
+  - id: VAL_008
+    when: host_or_mcp_setup
+    do:
+      - run_host_readiness_check_before_claiming_active
+      - verify_project_local_mcp_config_contains_aep_server
+      - report_global_config_and_manual_ide_actions_separately
+      - never_claim_host_enforced_when_direct_tool_bypass_remains

@@ -1,0 +1,154 @@
+id: prompt_economy
+type: operational_rules
+version: 0.9.0
+purpose: improve_user_prompt_without_token_bloat
+principle: always_improve_prompt_only_as_much_as_needed_for_safe_execution
+rules:
+  - id: PROMPT_001
+    name: keep_improved_prompt_short
+    do:
+      - preserve_user_intent
+      - add_missing_technical_constraints_only_when_needed
+      - avoid_rewriting_into_long_spec
+  - id: PROMPT_002
+    name: proportional_prompt_expansion
+    by_level:
+      level_0: micro_prompt_comparison
+      level_1: micro_prompt_comparison
+      level_2: compact_objective_scope_validation
+      level_3: compact_critical_intent_risk_confirmation
+  - id: PROMPT_003
+    name: no_prompt_bloat
+    avoid:
+      - repeating_full_context
+      - adding_unrequested_features
+      - creating_long_checklists_for_simple_tasks
+      - copying_protocol_text_into_user_prompt
+  - id: PROMPT_004
+    name: economical_improved_prompt_shape
+    format:
+      - original_prompt
+      - action
+      - target
+      - scope_limit
+      - risk_level
+      - success_criterion
+      - validation
+      - execution_hint_if_needed
+      - confirmation_if_needed
+  - id: PROMPT_006
+    name: precise_improved_prompt_contract
+    purpose: make_pm_actionable_without_becoming_a_spec
+    do:
+      - state_one_primary_action_with_imperative_verb
+      - name_the_target_file_flow_command_or_domain_when_known
+      - state_what_is_out_of_scope_when_scope_could_expand
+      - include_success_criterion_as_observable_result
+      - include_validation_or_blocker_needed_to_trust_result
+      - use_ai_protocol_run_or_run_auto_when_local_execution_should_be_controlled
+    avoid:
+      - vague_verbs_like_improve_adjust_handle_without_target
+      - hidden_assumptions_about_user_intent
+      - validation_words_without_specific_evidence
+      - promising_guarantee_when_host_or_runner_is_not_controlling_execution
+  - id: PROMPT_007
+    name: compact_execution_intent
+    purpose: state_expected_context_and_capabilities_only_when_it_reduces_risk
+    use_when:
+      - risk_level_2_or_3
+      - capability_skill_mcp_gateway_or_publish_may_be_needed
+      - known_entry_files_are_required_to_avoid_wrong_route
+      - local_execution_should_pass_through_framework_runner
+    format:
+      - "Abrir: <1-3 initial files or route entries>"
+      - "Usar: <only required capability, skill, tool, gate, or runner>"
+    omit_when:
+      - level_0_direct_answer
+      - level_1_without_known_target_or_optional_capability
+      - entries_would_be_guesses
+      - listing_capabilities_would_not_change_execution_quality
+    limits:
+      max_open_entries: 3
+      max_use_entries: 2
+      prefer_route_name_over_many_files: true
+      say_unknown_target_instead_of_inventing_file: true
+    avoid:
+      - full_file_checklists_inside_pm
+      - listing_all_available_skills_or_mcps
+      - committing_to_unverified_files
+      - using_execution_hint_as_permission_for_sensitive_action
+  - id: PROMPT_005
+    name: show_prompt_comparison_when_interpretation_matters
+    do:
+      - include_user_original_prompt_for_technical_or_interpreted_tasks
+      - include_ai_improved_prompt_for_technical_or_interpreted_tasks
+      - keep_comparison_to_minimum_viable_words
+      - preserve_user_language_when_possible
+    avoid:
+      - hiding_interpretation_from_user
+      - expanding_simple_requests_into_large_specs
+    may_omit_when:
+      - level_0
+      - no_technical_action
+      - no_scope_or_intent_interpretation
+      - direct_answer_is_clearer
+limits:
+  level_0:
+    max_lines: 5
+    max_expansion_ratio: 1.5
+    max_tokens_est: 80
+  level_1:
+    max_lines: 5
+    max_expansion_ratio: 2.0
+    max_tokens_est: 110
+  level_2:
+    max_lines: 7
+    max_expansion_ratio: 4.0
+    max_tokens_est: 190
+  level_3:
+    max_lines: 8
+    max_expansion_ratio: 6.0
+    max_tokens_est: 290
+delivery_rule:
+  default_format: micro_when_low_risk
+  micro_template:
+    - "PO: <original in one short line>"
+    - "PM: <improved in one short line>"
+    - "OK:"
+    - "  Feito: <done>"
+    - "  Validado: <evidence or not run>"
+    - "  Risco: <residual risk or none>"
+  ultra_compact_template:
+    - "PO: <original in one short line>"
+    - "PM: <improved in one short line>"
+    - "Feito: <what changed or answer>"
+    - "Validado: <evidence or not run>"
+    - "Risco: <residual risk or none>"
+  show_when:
+    - technical_action
+    - scope_interpretation
+    - risk_level_1_or_higher
+    - prompt_improvement_changes_execution
+  comparison:
+    - original_prompt_must_keep_user_words_when_reasonable
+    - improved_prompt_must_state_action_target_scope_success_validation
+    - improved_prompt_may_include_open_use_hints_only_when_they_reduce_risk
+    - improved_prompt_must_fit_risk_level_limits
+    - improved_prompt_must_not_hide_assumptions_or_runner_limits
+  token_policy:
+    - use_abbreviated_labels_po_pm_when_user_did_not_request_full_form
+    - level_0_may_use_direct_answer_when_comparison_adds_no_value
+    - level_1_use_micro_template
+    - level_2_use_compact_objective_scope_validation
+    - level_3_include_risk_confirmation_without_long_spec
+    - omit_tests_line_when_no_break_risk_exists
+    - omit_not_validated_line_when_every_relevant_validation_is_reported
+  readability_policy:
+    - micro_template_must_keep_line_breaks
+    - ok_block_order_is_done_validated_risk
+    - do_not_merge_po_pm_ok_into_one_line
+    - do_not_separate_done_validated_risk_only_with_semicolons
+precision_examples:
+  weak_pm: "Melhorar o setup e validar."
+  strong_pm: "Adicionar setup-local consentido para instalar regras, hooks e wrappers; validar com projeto temporario e manter fora do escopo publicacao."
+  compact_execution_hint: "Abrir: protocol/prompt-economy.yaml, behavior/contract.yaml. Usar: gateway se houver escrita; health_check."

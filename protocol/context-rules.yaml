@@ -1,0 +1,89 @@
+id: context_rules
+type: operational_rules
+version: 0.9.0
+context_policy:
+  use: minimum_sufficient_context
+  prefer:
+    - context_map_before_domain_docs
+    - atomic_subject_docs_before_broad_docs
+    - aliases_for_search_not_truth
+    - targeted_search
+    - relevant_snippets
+    - current_state_over_old_history
+    - context_compiler_before_large_reads
+  avoid:
+    - reading_large_files_without_reason
+    - repeating_long_rules_in_chat
+    - mixing_old_and_current_docs
+    - treating_conversation_as_source_of_truth
+    - treating_aliases_as_verified_behavior
+    - reading_broad_docs_when_atomic_subject_doc_exists
+file_size:
+  max_lines: 400
+  when_near_limit:
+    - split_by_subject
+    - keep_main_file_short
+    - update_index
+subject_docs:
+  rule: docs_should_be_grouped_by_searchable_subject_not_only_by_size
+  do:
+    - create_or_update_one_doc_per_domain_flow_decision_or_component
+    - use_filename_terms_that_match_likely_user_requests_and_code_symbols
+    - use_rg_to_find_exact_code_symbols_after_reading_subject_doc
+    - verify_code_before_treating_doc_as_truth
+  avoid:
+    - fragmenting_into_micro_docs_without_standalone_subject
+    - duplicating_same_subject_across_docs
+    - keeping_cross_domain_docs_without_links_to_specific_subject_docs
+memory:
+  record:
+    - stable_decision
+    - recurring_rule
+    - known_problem
+    - resume_checkpoint
+    - important_validation
+  avoid_recording:
+    - long_logs
+    - temporary_details
+    - unevidenced_conclusions
+handoff_summary:
+  use_when: new_conversation_needed
+  fields:
+    - objective
+    - last_cut
+    - relevant_files_or_areas
+    - validations_done
+    - pending_items
+    - next_step
+context_compiler:
+  source: context-compiler.yaml
+  use_when:
+    - risk_level_2_or_3
+    - large_project
+    - long_session
+    - conflicting_history
+    - task_crosses_domains
+existing_project_files:
+  preserve:
+    - README.md
+    - docs/
+    - .cursorrules
+    - CLAUDE.md
+    - GEMINI.md
+    - .github/copilot-instructions.md
+    - .cursor/rules/ai-execution-protocol.mdc
+    - package_docs
+    - framework_configs
+  behavior:
+    - do_not_overwrite_user_docs_without_request
+    - read_project_docs_only_when_route_requires_context
+    - treat_generated_or_old_docs_as_untrusted_until_verified
+    - keep_protocol_rules_in_AGENTS_and_protocol_folder
+    - use_framework_configs_as_technical_source_when_task_touches_framework
+    - duplicate_protocol_rules_across_ide_files_only_with_marked_integration
+  conflict_order:
+    - current_user_request
+    - AGENTS_protocol_block
+    - ide_framework_or_project_specific_rules
+    - project_specific_docs
+    - old_generated_reports

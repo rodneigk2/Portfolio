@@ -1,0 +1,139 @@
+id: persistent_context
+type: operational_rules
+version: 0.9.0
+purpose: navigate_project_memory_without_loading_unneeded_context
+principle: aliases_are_pointers_not_truth
+autonomous_memory:
+  target: generate_memory_from_project_state_without_manual_maintenance
+  current_safe_stage: bootstrap_with_small_verified_artifacts
+  promote_to_required_only_when:
+    - indexer_exists
+    - generated_output_is_reproducible
+    - stale_output_can_be_detected
+    - validation_passes_in_real_projects
+economy_goal:
+  target: reduce_unneeded_context_up_to_90_percent_when_safe
+  meaning: reduce_irrelevant_context_not_required_context
+  stop_condition:
+    - objective_is_clear
+    - candidate_area_is_mapped
+    - validation_plan_is_clear
+    - no_unresolved_risk_requires_more_context
+entrypoints:
+  - canonical-state.yaml
+  - context-map.yaml
+  - memory/INDEX.yaml
+  - decisions/
+progressive_retrieval:
+  order:
+    - identify_objective
+    - match_domain_or_alias_in_context_map
+    - read_canonical_state_when_project_truth_matters
+    - read_active_decisions_for_domain
+    - query_memory_index_for_matching_subjects
+    - read_only_matching_active_memory
+    - read_only_needed_atomic_subject_docs
+    - search_candidate_symbols_or_files
+    - read_relevant_snippet_first
+    - read_direct_dependencies_when_needed
+    - read_full_file_when_snippet_is_not_enough
+confidence_policy:
+  high:
+    threshold: enough_context_to_act_and_validate
+    do:
+      - execute_with_current_context
+  medium:
+    threshold: likely_context_gap_or_adjacent_dependency
+    do:
+      - expand_one_retrieval_level
+  low:
+    threshold: ambiguous_intent_or_missing_target
+    do:
+      - ask_clarifying_question
+context_validator:
+  check:
+    - enough_context_for_objective
+    - active_decisions_loaded_when_relevant
+    - matching_memory_loaded_only_when_relevant
+    - context_budget_respected_or_expansion_justified
+    - direct_dependencies_loaded_when_needed
+    - adjacent_domain_risk_checked
+    - docs_do_not_conflict_with_verified_files
+  if_gap_found:
+    - expand_context_not_scope
+action_validator:
+  require:
+    - target_is_identified
+    - expected_result_is_clear
+    - impact_is_mapped_for_level_2_or_3
+    - validation_plan_exists
+  if_intent_is_ambiguous:
+    - ask_user_before_editing
+  rule: context_can_expand_scope_cannot_expand
+alias_policy:
+  use_aliases_for:
+    - domain_routing
+    - symbol_search_terms
+    - dependency_search_terms
+    - recent_context_labels
+  never_use_aliases_as:
+    - proof_of_current_behavior
+    - replacement_for_code_or_verified_files
+    - permission_to_edit_without_mapping
+snippet_policy:
+  prefer:
+    - targeted_search
+    - symbol_or_function_snippet
+    - nearby_imports_types_and_callers_when_needed
+  read_full_file_when:
+    - imports_or_types_change_meaning
+    - side_effects_or_shared_state_matter
+    - snippet_boundaries_are_unclear
+    - edit_risk_is_level_2_or_3_and_file_is_candidate
+conflict_policy:
+  order:
+    - current_user_request
+    - verified_code_or_files_this_turn
+    - active_decisions
+    - canonical_state
+    - explicit_user_preferences
+    - inferred_patterns_with_evidence
+    - domain_docs
+    - current_conversation
+  if_docs_conflict_with_code:
+    - trust_verified_code_for_behavior
+    - report_stale_doc_risk
+validation:
+  require:
+    - state_context_used_when_relevant
+    - state_context_not_loaded_when_excluded_for_economy
+    - memory_index_used_before_memory_files
+    - memory_update_result_recorded_when_new_durable_fact_exists
+    - sensitive_or_unverified_content_not_promoted
+    - escalate_context_if_snippet_is_insufficient
+    - update_subject_index_when_docs_are_split
+atomic_subject_flow:
+  order:
+    - identify_subject_terms_from_request
+    - find_subject_doc_by_context_map_index_or_rg
+    - read_subject_doc_before_broad_doc
+    - use_rg_for_exact_code_symbol_or_term
+    - read_code_snippet_first
+    - expand_to_full_file_or_related_doc_when_needed
+  failure_mitigations:
+    fragmentation:
+      - do_not_create_doc_for_micro_detail_without_standalone_subject
+      - merge_or_link_overlapping_docs
+    bad_names:
+      - include_domain_flow_component_or_symbol_terms_in_filename
+    duplicates:
+      - search_existing_docs_before_creating_new_doc
+      - prefer_updating_existing_subject_doc
+    stale_docs:
+      - verify_current_code_before_behavior_claim
+      - report_stale_doc_risk
+    wrong_search_terms:
+      - use_aliases_and_synonyms_as_search_terms
+      - search_docs_and_code_with_rg
+    insufficient_snippet:
+      - expand_to_imports_types_callers_or_full_file

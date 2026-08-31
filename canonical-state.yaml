@@ -1,0 +1,16 @@
+id: canonical_state
+type: project_state
+version: 0.9.0
+purpose: small_current_truth_summary_for_ai_navigation
+status: bootstrap_template
+truth_order:
+  - current_user_request
+  - verified_current_files
+  - active_project_decisions
+  - explicit_user_preferences
+  - inferred_patterns_with_evidence
+  - project_docs
+  - conversation_history
+notes:
+  - memory_guides_current_request_authorizes
+  - update_when_verified_project_state_changes

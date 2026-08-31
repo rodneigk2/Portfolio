@@ -1,18 +1,25 @@
-﻿
-import { easeOut } from "framer-motion";
+import type { Variants } from "framer-motion";
 
-export const fadeInUp = {
-  initial: { opacity: 0.08, y: 18, scale: 0.992 },
-  animate: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.52, ease: easeOut } },
+const premiumEase = [0.16, 1, 0.3, 1] as const;
+
+export const fadeInUp: Variants = {
+  initial: { opacity: 0, y: 18 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.58, ease: premiumEase },
+  },
 };
 
-
-export const fadeIn = {
-  initial: { opacity: 0.08 },
-  animate: { opacity: 1, transition: { duration: 0.52, ease: easeOut } },
+export const fadeIn: Variants = {
+  initial: { opacity: 0 },
+  animate: {
+    opacity: 1,
+    transition: { duration: 0.58, ease: premiumEase },
+  },
 };
 
-export const stagger = {
-  animate: { transition: { staggerChildren: 0.06, delayChildren: 0.02 } },
+export const stagger: Variants = {
+  initial: {},
+  animate: { transition: { staggerChildren: 0.07, delayChildren: 0.04 } },
 };
-

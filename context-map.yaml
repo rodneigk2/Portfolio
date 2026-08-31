@@ -1,0 +1,23 @@
+id: project_context_map
+type: context_map
+version: 0.9.0
+purpose: small_index_for_progressive_context_retrieval
+maintenance:
+  current_mode: manual_bootstrap
+  rule: aliases_are_pointers_not_truth
+read_first:
+  - canonical-state.yaml
+  - protocol/fast-path.yaml
+  - protocol/router.yaml
+  - protocol/route-packs.yaml
+  - memory/INDEX.yaml
+  - capabilities/registry.yaml
+domains: {}
+retrieval_policy:
+  order:
+    - match_domain_by_alias
+    - read_matching_memory_subjects
+    - read_domain_docs_only_when_needed
+    - search_candidate_files_or_symbols
+    - read_relevant_snippet_first
+    - read_full_file_when_snippet_is_not_enough

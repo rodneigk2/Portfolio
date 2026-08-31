@@ -1,0 +1,11 @@
+results/
+benchmarks/generated/
+model-runs/generated/
+real-runs/local/
+ai-protocol-feedback/runs/
+ai-protocol-feedback/outbox/
+.aep-host/node_modules/
+.ai-protocol-run/
+dist/
+scripts/__pycache__/
+*.pyc

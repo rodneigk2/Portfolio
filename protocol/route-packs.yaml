@@ -1,0 +1,340 @@
+id: route_packs
+type: route_summary_index
+version: 0.9.0
+purpose: compact_first_read_before_full_route_files
+principle: read_pack_first_expand_only_when_needed
+use:
+  - after_router_selects_route
+  - before_opening_all_route_files
+  - when_task_is_clear_enough_for_compact_rules
+default_execution:
+  - use_pack_as_operational_context_when_sufficient
+  - open_full_route_files_only_for_unclear_risk_scope_validation_or_schema
+  - open_capability_files_only_when_skill_mcp_or_optional_tool_will_be_used
+  - open_context_budget_only_when_expansion_or_budget_uncertainty_exists
+expand_when:
+  - risk_or_scope_is_unclear
+  - validation_plan_is_not_clear
+  - route_pack_conflicts_with_user_request
+  - task_is_level_2_or_3_and_impact_is_not_mapped
+  - yaml_schema_or_exact_rule_text_is_needed
+packs:
+  simple_answer:
+    risk: 0
+    read_if_pack_insufficient:
+      - fast-path.yaml
+    do:
+      - answer_directly
+      - avoid_plan_or_file_reads
+      - keep_po_pm_ok_short_when_required
+  status_version_check:
+    risk: 0
+    read_if_pack_insufficient:
+      - cost-quality-policy.yaml
+    do:
+      - use_only_for_question_not_push_pull_publish_or_update_action
+      - run_only_version_and_git_status_checks
+      - stop_when_version_current_and_repo_clean_or_synced
+      - report_no_full_maintenance_when_no_drift_is_found
+      - escalate_only_on_detected_drift_error_dirty_tree_or_explicit_full_scan_request
+  small_fix:
+    risk: 1
+    read_if_pack_insufficient:
+      - fast-path.yaml
+      - validation-checklist.yaml
+    do:
+      - identify_small_reversible_target
+      - read_focused_context
+      - change_minimum_needed
+      - validate_directly
+  user_flow_bug:
+    risk: 2
+    read_if_pack_insufficient:
+      - context-compiler.yaml
+      - risk-levels.yaml
+      - mapping-checklists.yaml
+      - validation-checklist.yaml
+    do:
+      - map_flow_candidate_files_and_regression_risk
+      - read_snippets_before_full_files
+      - preserve_expected_behavior
+      - validate_main_success_and_failure_paths
+  refactor:
+    risk: 2
+    read_if_pack_insufficient:
+      - context-compiler.yaml
+      - mapping-checklists.yaml
+      - validation-checklist.yaml
+      - spec-driven.yaml
+    do:
+      - define_behavior_to_preserve
+      - keep_scope_incremental
+      - avoid_new_features
+      - validate_behavior_after_change
+  feature_or_spec:
+    risk: 2
+    read_if_pack_insufficient:
+      - context-compiler.yaml
+      - risk-levels.yaml
+      - mapping-checklists.yaml
+      - validation-checklist.yaml
+      - spec-driven.yaml
+    do:
+      - use_light_spec_when_scope_or_risk_benefits
+      - define_objective_scope_validation
+      - implement_incrementally
+      - avoid_full_spec_for_small_clear_tasks
+  docs_update:
+    risk: 1
+    read_if_pack_insufficient:
+      - context-rules.yaml
+      - formatting-rules.yaml
+    do:
+      - update_only_affected_docs
+      - keep_docs_atomic_by_subject
+      - verify_links_or_references
+      - update_index_when_structure_changes
+  public_artifact_review:
+    risk: 1
+    read_if_pack_insufficient:
+      - public-content-policy.yaml
+      - validation-checklist.yaml
+    do:
+      - keep_only_current_user_facing_information
+      - exclude_roadmaps_release_commands_and_maintainer_checklists
+      - run_public_artifact_check_before_distribution
+      - verify_docs_descriptions_release_notes_and_public_versions_before_publish
+      - verify_package_content_versions_before_publish
+  host_mcp_setup:
+    risk: 1
+    read_if_pack_insufficient:
+      - host-installation-readiness.yaml
+      - host-onboarding.yaml
+      - host-runtime-contract.yaml
+      - validation-checklist.yaml
+    do:
+      - read_host_installation_readiness_before_answer_or_action
+      - after_yes_install_or_update_project_local_aep_host
+      - generate_project_local_mcp_configs
+      - run_host_readiness_before_claiming_active
+      - ask_explicit_consent_before_global_codex_config_write
+      - report_manual_ide_trust_reload_or_enable_steps
+      - report_wrapped_enforced_if_direct_tools_remain_exposed
+  host_onboarding:
+    risk: 1
+    read_if_pack_insufficient:
+      - host-onboarding.yaml
+      - validation-checklist.yaml
+    do:
+      - inspect_only_onboarding_state_first
+      - show_notice_once_when_pending
+      - keep_host_rules_and_real_tests_as_independent_choices
+      - apply_project_local_rules_with_backup_after_acceptance
+      - require_onboarding_verify_pass_before_continuing
+      - run_compliance_or_repair_only_on_suspected_adherence_problem
+      - report_best_effort_enforcement
+  database_or_data:
+    risk: 3
+    read_if_pack_insufficient:
+      - context-compiler.yaml
+      - risk-levels.yaml
+      - mapping-checklists.yaml
+      - validation-checklist.yaml
+      - spec-driven.yaml
+    do:
+      - map_affected_data
+      - avoid_destructive_action_without_confirmation
+      - define_backup_or_rollback
+      - validate_before_and_after
+  auth_security_secret:
+    risk: 3
+    read_if_pack_insufficient:
+      - context-compiler.yaml
+      - risk-levels.yaml
+      - mapping-checklists.yaml
+      - validation-checklist.yaml
+      - spec-driven.yaml
+    do:
+      - map_security_surface
+      - avoid_exposing_secrets
+      - require_confirmation_for_sensitive_write
+      - validate_allowed_and_denied_paths
+  deploy_or_production:
+    risk: 3
+    read_if_pack_insufficient:
+      - context-compiler.yaml
+      - risk-levels.yaml
+      - validation-checklist.yaml
+      - context-rules.yaml
+      - spec-driven.yaml
+    do:
+      - verify_local_state
+      - run_pre_deploy_validation
+      - require_confirmation_before_deploy
+      - run_post_deploy_check_if_executed
+  evaluate_response:
+    read_if_pack_insufficient:
+      - ../behavior/contract.yaml
+      - ../eval/rubric.yaml
+      - ../schema/evaluated-response.schema.json
+    do:
+      - score_risk_behavior_avoidance_delivery_clarity
+      - check_behavior_contract_alignment
+      - apply_automatic_fail_rules
+  create_or_edit_yaml:
+    read_if_pack_insufficient:
+      - formatting-rules.yaml
+      - ../schema/protocol-rule.schema.yaml
+    do:
+      - keep_yaml_compact
+      - validate_schema_when_available
+      - update_index_when_new_file_is_added
+  prompt_improvement:
+    read_if_pack_insufficient:
+      - prompt-economy.yaml
+    do:
+      - preserve_user_intent
+      - improve_only_as_much_as_needed
+      - keep_prompt_proportional_to_risk
+      - avoid_long_specs_for_simple_tasks
+  context_optimization:
+    read_if_pack_insufficient:
+      - persistent-context.yaml
+      - context-rules.yaml
+      - context-compiler.yaml
+    do:
+      - use_context_map_and_aliases_as_pointers
+      - read_atomic_subject_doc_before_broad_doc
+      - search_with_rg_before_full_file_reads
+      - expand_context_without_expanding_scope
+  memory_update:
+    risk: 1
+    read_if_pack_insufficient:
+      - adaptive-memory.yaml
+      - context-budget.yaml
+      - validation-checklist.yaml
+    do:
+      - extract_only_stable_non_sensitive_knowledge
+      - search_before_create
+      - merge_replace_or_keep_unchanged
+      - update_memory_index
+      - report_memory_update_result
+  memory_conflict_or_replacement:
+    risk: 2
+    read_if_pack_insufficient:
+      - adaptive-memory.yaml
+      - context-compiler.yaml
+      - validation-checklist.yaml
+    do:
+      - preserve_provenance
+      - mark_old_entry_replaced
+      - keep_current_request_authoritative
+      - validate_no_duplicate_active_entry
+  selective_validation:
+    risk: 1
+    read_if_pack_insufficient:
+      - selective-validation.yaml
+    do:
+      - infer_checks_from_changed_files
+      - run_smallest_sufficient_validation
+      - expand_when_shared_contract_changes
+  capability_selection:
+    risk: adaptive
+    read_if_pack_insufficient:
+      - capability-router.yaml
+      - capability-gate.yaml
+      - enforcement-gateway.yaml
+      - context-budget.yaml
+    do:
+      - define_required_outcomes_and_operations
+      - select_smallest_available_capability_set
+      - load_only_selected_skill_or_mcp
+      - use_gateway_for_level_2_level_3_or_side_effect_tool_use_when_available
+      - require_confirmation_for_sensitive_remote_effect
+      - audit_used_capabilities_against_selected_plan
+      - stop_discovery_when_quality_coverage_is_complete
+  enforcement_gateway:
+    risk: adaptive
+    read_if_pack_insufficient:
+      - enforcement-gateway.yaml
+      - ../capabilities/exposure-policy.yaml
+    do:
+      - validate_capability_plan_before_level_2_level_3_tool_use
+      - check_call_before_write_publish_destructive_or_mcp_tool_use
+      - block_when_gateway_returns_blocked
+      - report_best_effort_when_gateway_is_unavailable
+      - avoid_gateway_for_level_0_direct_answer
+  runtime_adapter:
+    risk: adaptive
+    read_if_pack_insufficient:
+      - runtime-adapter.yaml
+      - enforcement-gateway.yaml
+      - capability-gate.yaml
+    do:
+      - use_lifecycle_contract_for_host_or_agent_framework_integration
+      - validate_plan_before_task_action
+      - check_or_proxy_tool_calls_before_execution
+      - record_trace_without_collecting_full_logs
+      - run_post_task_checks_before_delivery
+      - report_best_effort_when_host_exposes_direct_tool_bypass
+  intelligence_selection:
+    risk: adaptive
+    read_if_pack_insufficient:
+      - intelligence-router.yaml
+      - context-budget.yaml
+    do:
+      - choose_cheapest_sufficient_intelligence_level
+      - escalate_for_risk_ambiguity_validation_failure_or_large_context
+      - deescalate_when_task_is_direct_and_low_risk
+      - do_not_trade_security_correctness_or_validation_for_cost
+  cost_quality_optimization:
+    risk: adaptive
+    read_if_pack_insufficient:
+      - cost-quality-policy.yaml
+      - intelligence-router.yaml
+      - context-budget.yaml
+      - selective-validation.yaml
+    do:
+      - define_quality_bar_before_cutting_cost
+      - use_context_model_capability_validation_levers_in_that_order
+      - measure_cost_delta_when_possible
+      - reject_savings_that_reduce_required_context_or_validation
+  behavior_evaluation:
+    risk: 1
+    read_if_pack_insufficient:
+      - ../behavior/contract.yaml
+      - ../behavior/audit-checklist.yaml
+      - ../eval/rubric.yaml
+    do:
+      - compare_response_to_observable_behaviors
+      - verify_simple_tasks_are_not_overprocessed
+      - verify_critical_tasks_are_not_undercontrolled
+      - apply_behavior_automatic_fail_rules
+  dataset_preparation:
+    risk: 1
+    read_if_pack_insufficient:
+      - ../behavior/contract.yaml
+      - ../behavior/audit-checklist.yaml
+      - prompt-economy.yaml
+      - ../dataset/README.md
+    do:
+      - create_examples_from_observable_behavior
+      - include_good_bad_and_reason
+      - keep_training_examples_consistent
+      - avoid_rewarding_bureaucracy
+  real_run_collection:
+    risk: 2
+    read_if_pack_insufficient:
+      - real-run-consent.yaml
+      - validation-checklist.yaml
+      - ../schema/real-run.schema.json
+    do:
+      - inspect_visible_consent_state
+      - use_initial_choice_persisted_by_host_onboarding
+      - require_explicit_collection_consent
+      - redact_sensitive_or_personal_content
+      - record_eligible_tasks_automatically_after_consent
+      - store_only_under_visible_feedback_folder
+      - return_to_local_framework_only_when_configured
+      - keep_external_submission_forbidden_without_separate_consent
+      - provide_revocation_command

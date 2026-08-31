@@ -1,0 +1,138 @@
+id: host_installation_readiness
+type: operational_rules
+version: 0.9.0
+purpose: ensure_ai_agents_install_and_validate_aep_hosts_to_reduce_cost_risk_and_errors
+framework_purpose:
+  - make_ai_execution_more_controlled_verifiable_and_economical
+  - reduce_context_cost_tool_noise_and_unnecessary_actions
+  - improve_security_by_gating_risk_tool_use_and_publication_steps
+  - reduce_ai_errors_with_mandatory_mapping_preflight_validation_and_residual_risk_reporting
+  - make_host_and_mcp_setup_explicit_before_claiming_control_is_active
+quality_priorities:
+  - economy_minimum_sufficient_context_and_capabilities
+  - security_no_unapproved_write_publish_destructive_or_global_config_changes
+  - reliability_verify_real_installed_state_not_assumptions
+  - low_error_execution_use_checklists_gates_and_post_task_validation
+  - truthful_reporting_separate_done_automated_manual_and_residual_risk
+trigger_when_user_mentions:
+  - codex_extension
+  - vscode_codex
+  - ide_extension
+  - mcp_server
+  - aep_host
+  - setup_local
+  - host_setup
+  - install_or_update_aep_in_project
+required_read_before_answer_or_action:
+  - protocol/host-installation-readiness.yaml
+  - protocol/host-onboarding.yaml
+  - protocol/host-runtime-contract.yaml
+project_local_actions_after_yes:
+  - install_or_update_ai_execution_protocol_package_when_needed
+  - run_setup_local_or_host_setup_for_target_project
+  - run_host_lock_down_for_codex_when_exclusive_mode_is_requested
+  - generate_aep_host_directory
+  - generate_project_mcp_configs
+  - generate_exclusive_exposure_policy
+  - install_aep_host_dependencies_when_npm_available
+  - run_host_readiness_check
+  - run_host_doctor
+expected_project_files:
+  - .aep-host/src/mcp-server.js
+  - .aep-host/mcp-config.json
+  - .aep-host/exposure-policy.json
+  - .aep-host/auto-config-report.json
+  - .codex/config.toml
+  - .vscode/mcp.json
+  - .vscode/aep-mcp.example.json
+  - .cursor/mcp.json
+  - .mcp.json
+controlled_host_boundary:
+  api:
+    - GET /boundary
+    - GET /tools
+    - POST /adapter/exclusive-confirmation
+  mcp_tools:
+    - aep_boundary
+    - aep_tools
+  required_manifest:
+    - agent_visible_direct_tools_empty
+    - denied_direct_tools_listed
+    - controlled_tools_listed
+    - all_execution_routes_through_aep_execute_tool
+    - process_timeout_output_limit_and_secret_redaction_reported
+    - adapter_exclusive_confirmation_rejects_direct_tools
+    - adapter_controlled_actions_require_host_token_when_configured
+global_user_config_boundary:
+  can_prepare_snippet: true
+  can_write_only_with_explicit_global_consent: true
+  must_not_claim_automatic: true
+manual_host_actions_to_report:
+  - approve_workspace_trust_prompt
+  - reload_or_reopen_ide
+  - enable_mcp_server_in_extension_ui_when_required
+  - hide_direct_tools_for_host_enforced_mode
+validation:
+  commands:
+    - ai-protocol host lock-down <project> --codex --yes
+    - ai-protocol host readiness <project> --host codex-vscode
+    - ai-protocol host readiness <project> --host codex-vscode --require-exclusive
+    - ai-protocol host doctor <project>
+    - ai-protocol strict-status <project>
+  pass_requires:
+    - host_present
+    - project_mcp_config_present
+    - aep_server_named_in_vscode_mcp_config
+    - exposure_policy_exclusive_requested
+    - dependencies_installed_or_reported_skipped
+    - global_config_status_reported
+    - manual_host_actions_reported
+host_enforced_requires:
+  - only_aep_mcp_exposed_to_agent
+  - direct_shell_file_browser_git_deploy_and_ungated_mcp_tools_hidden
+  - host_reloaded_after_config_change
+  - aep_boundary_reports_no_agent_visible_direct_tools
+  - adapter_uses_host_token_for_controlled_actions_when_configured
+  - adapter_exclusive_confirmation_recorded_from_visible_tool_inventory
+  - exclusive_host_confirmation_recorded
+  - readiness_require_exclusive_passes
+exclusive_confirmation_file:
+  path: .aep-host/exclusive-host.json
+  required_fields:
+    - only_aep_mcp_exposed
+    - direct_tools_hidden
+    - direct_shell_hidden
+    - direct_file_write_hidden
+    - direct_browser_hidden
+    - direct_git_hidden
+    - direct_database_hidden
+    - direct_deploy_hidden
+    - non_aep_mcps_hidden
+    - host_reloaded_after_config
+    - visible_mcp_servers
+    - confirmed_by
+codex_lock_down:
+  command: ai-protocol host lock-down <project> --codex --yes
+  writes_local_project_config: .codex/config.toml
+  status_after_write: host_exclusive_requested
+  must_not_create: .aep-host/exclusive-host.json
+  requested_only_message: 'AEP requested exclusive host mode, but host enforcement is not confirmed yet. Restart/reload the host and run host doctor again. Current mode: wrapped_enforced. Residual risk: host_direct_tool_bypass.'
+  confirmed_message: 'AEP host exclusive mode confirmed. Only AEP MCP is exposed to the agent. Current mode: host_enforced.'
+  limitations:
+    - writing_configuration_does_not_remove_tools_already_loaded_in_current_session
+    - real_effect_requires_codex_or_ide_reload_and_tool_inventory_rebuild
+    - host_enforced_requires_verifiable_inventory_not_optimistic_config
+rules:
+  - do_not_say_aep_is_active_in_codex_until_readiness_or_user_ui_confirms
+  - do_not_claim_host_enforced_until_require_exclusive_readiness_passes
+  - lock_down_may_report_host_exclusive_requested_but_not_host_enforced
+  - lock_down_must_not_create_exclusive_host_confirmation
+  - strict_status_must_report_wrapped_enforced_when_host_inventory_is_missing_or_direct_tools_remain_visible
+  - setup_local_yes_must_create_project_exposure_policy_and_run_readiness
+  - project_local_setup_is_allowed_after_yes
+  - global_codex_config_write_requires_explicit_global_consent
+  - ide_clicks_trust_reload_and_mcp_enablement_remain_user_or_host_actions
+  - report_wrapped_enforced_when_direct_tool_bypass_is_still_exposed
+  - aep_controlled_host_must_publish_boundary_manifest
+  - exclusive_confirmation_must_reject_any_non_aep_visible_tool
+  - controlled_actions_must_reject_missing_or_invalid_adapter_token_when_configured

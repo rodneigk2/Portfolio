@@ -1,0 +1,45 @@
+id: modes
+type: operational_modes
+version: 0.9.0
+default: balanced
+modes:
+  fast:
+    purpose: minimum_context_and_fast_execution
+    use_when:
+      - low_risk
+      - clear_task
+      - reversible_change
+      - simple_version_status_or_push_check
+    behavior:
+      - read_fast_path_and_route_only
+      - show_compact_original_and_improved_prompt_when_required
+      - allow_direct_level_0_answer_when_clearer
+      - validate_minimum_required
+      - stop_after_minimum_status_version_proof_when_no_drift
+  balanced:
+    purpose: default_safe_execution
+    use_when:
+      - normal_task
+      - moderate_risk
+    behavior:
+      - classify_risk
+      - use_router
+      - map_when_level_2_or_3
+      - use_light_spec_when_scope_is_unclear_or_multi_step
+      - validate_and_report_limits
+      - show_original_and_improved_prompt_when_required
+  strict:
+    purpose: maximum_safety_and_auditability
+    use_when:
+      - level_3
+      - unclear_high_impact_task
+      - production_or_sensitive_data
+    behavior:
+      - show_compact_interpretation
+      - require_critical_map
+      - use_full_spec_for_level_3_or_multi_module_changes
+      - ask_confirmation_before_sensitive_action
+      - report_validation_and_residual_risk
+      - show_original_and_improved_prompt_when_required
+      - provide_test_list_when_break_risk_exists
+      - prefer_more_validation_over_speed

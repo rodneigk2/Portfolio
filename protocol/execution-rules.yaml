@@ -1,0 +1,56 @@
+id: execution_rules
+type: operational_rules
+version: 0.9.0
+rules:
+  - id: EXEC_001
+    when: any_task
+    do:
+      - understand_goal
+      - classify_risk
+      - fetch_minimum_sufficient_context
+      - map_when_needed
+      - improve_prompt_proportional_to_risk_and_token_need
+      - execute_smallest_safe_change
+      - validate
+      - prepare_test_list_when_break_risk_exists
+      - deliver_with_evidence
+  - id: EXEC_002
+    when:
+      any:
+        - ambiguity
+        - risk
+        - multiple_interpretations
+        - user_requested_interpretation
+    do:
+      - show_technical_interpretation_before_action
+      - show_original_and_improved_prompt_when_required
+  - id: EXEC_003
+    when:
+      all:
+        - simple_task
+        - low_risk
+    do:
+      - solve_directly
+    avoid:
+      - heavy_plan
+      - unnecessary_confirmation
+  - id: EXEC_004
+    when:
+      any:
+        - multi_step_feature
+        - cross_file_change
+        - level_2_large
+        - level_3
+    do:
+      - create_light_or_full_spec_before_implementation
+    avoid:
+      - long_spec_for_simple_task
+      - spec_that_repeats_known_context
+  - id: EXEC_005
+    when: final_delivery
+    do:
+      - show_prompt_original
+      - show_prompt_melhorado_da_ia
+      - explain_what_was_done_in_plain_language
+      - list_validation_done_and_not_done
+      - list_manual_tests_when_break_risk_exists

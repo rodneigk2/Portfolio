@@ -1,0 +1,102 @@
+id: formatting_rules
+type: ai_readability_rules
+version: 0.9.0
+priority:
+  first: ai_readability
+  second: human_readability
+principles:
+  - one_main_subject_per_file
+  - atomic_docs_by_trackable_subject
+  - stable_keys
+  - direct_names
+  - short_lists
+  - plain_language_for_final_delivery
+  - technical_terms_explained_when_needed
+  - rules_before_examples
+  - separate_docs_from_protocol
+  - separate_criteria_templates_examples
+  - no_decorative_text
+final_delivery:
+  default: micro_when_low_risk
+  compact_labels:
+    prompt_original: PO
+    prompt_melhorado_da_ia: PM
+    low_risk_summary: OK
+    what_was_done: Feito
+    validation: Validado
+    what_to_test_when_needed: Testar
+    limits_and_residual_risk: Risco
+  micro_format:
+    use_when:
+      - level_0
+      - level_1
+    lines:
+      - PO
+      - PM
+      - OK
+    ok_block:
+      - Feito
+      - Validado
+      - Risco
+    avoid:
+      - semicolon_only_ok_line
+      - one_line_micro_response
+  required_sections:
+    - prompt_original
+    - prompt_melhorado_da_ia
+    - what_was_done
+    - validation
+    - limits_and_residual_risk
+  conditional_sections:
+    - what_to_test_when_needed
+  clarity:
+    - use_simple_sentences
+    - explain_impact_for_user
+    - avoid_internal_jargon_without_context
+    - keep_each_section_to_one_line_when_possible
+    - keep_micro_format_with_readable_line_breaks
+yaml_style:
+  prefer:
+    - ids
+    - type
+    - when
+    - do
+    - avoid
+    - deliver
+    - validation
+  avoid:
+    - long_paragraphs
+    - hidden_criteria
+    - synonyms_for_same_operational_concept
+    - oversized_files
+maintenance:
+  max_lines_per_file: 400
+  if_near_limit:
+    - split_by_theme
+    - update_readme
+atomic_documentation:
+  principle: one_file_one_trackable_subject
+  use_for:
+    - domain
+    - flow
+    - decision
+    - component
+    - integration
+    - validation_area
+  naming:
+    do:
+      - include_search_terms_in_filename
+      - prefer_domain_flow_or_component_names
+      - keep_titles_matching_filename_subject
+    avoid:
+      - generic_names_like_general_notes_part1
+      - duplicate_files_for_same_subject
+      - oversized_docs_with_multiple_unrelated_subjects
+  split_when:
+    - file_has_multiple_independent_subjects
+    - file_nears_line_limit
+    - rg_search_would_match_unrelated_sections
+  update_when_split:
+    - docs_readme
+    - index_or_context_map_when_relevant
+    - aliases_when_subject_terms_change

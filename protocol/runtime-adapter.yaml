@@ -1,0 +1,76 @@
+id: runtime_adapter
+type: operational_rules
+version: 0.9.0
+purpose: stable_contract_for_hosts_and_agent_frameworks
+principle: frameworks_integrate_with_protocol_through_lifecycle_calls
+contract:
+  start_task:
+    input:
+      - risk_level
+      - selected_capabilities
+      - operation_scope
+    output:
+      - plan_path
+      - trace_event
+  validate_plan:
+    gate: enforcement_gateway.validate_plan
+    blocks_when:
+      - invalid_risk_level
+      - missing_capability_plan
+      - external_capability_budget_exceeded
+  check_tool_call:
+    gate: enforcement_gateway.check_call
+    blocks_when:
+      - capability_not_selected
+      - unsupported_operation
+      - confirmation_required
+  proxy_tool:
+    gate: proxy_call
+    requirement:
+      - npm_script_name_from_package_json
+      - direct_tool_bypass_hidden_by_host_for_strict_mode
+  record_trace:
+    writes:
+      - .ai-protocol-run/trace.jsonl
+    avoids:
+      - full_command_output
+      - source_file_content
+      - secrets
+  finish_task:
+    input:
+      - status
+      - validation
+      - residual_risk
+      - impact_scope
+    output:
+      - report_path
+  run_checks:
+    gate: enforcement_gateway.run_checks
+    blocks_when:
+      - validation_evidence_missing
+      - impact_scope_missing_for_level_2_plus
+integration_targets:
+  codex:
+    mode: local_cli_and_instruction_files
+  openai_agents_sdk:
+    mode: wrap_tool_callbacks_and_lifecycle_hooks
+  langgraph:
+    mode: wrap_node_tool_edges_and_interrupt_boundaries
+  crewai:
+    mode: wrap_tool_execution_and_flow_steps
+  custom_host:
+    mode: call_adapter_before_every_tool_and_hide_direct_bypass
+rules:
+  - adapter_is_the_public_runtime_boundary
+  - lifecycle_calls_are_cheaper_than_loading_full_protocol_docs
+  - strict_mode_requires_host_to_hide_direct_tool_bypass
+  - proxy_tool_guarantee_applies_only_to_calls_through_proxy
+  - trace_report_is_evidence_not_full_log_collection
+  - adapter_does_not_guarantee_model_reasoning_correctness
+  - host_integration_status_must_be_reported_as_best_effort_or_enforced
+delivery:
+  include_when_used:
+    - adapter_mode
+    - enforcement_status
+    - trace_report_path
+    - bypass_limit

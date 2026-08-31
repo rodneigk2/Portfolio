@@ -1,0 +1,97 @@
+id: adaptive_memory
+type: operational_rules
+version: 0.9.0
+purpose: evolve_with_user_and_project_through_verified_external_memory
+principle: memory_guides_current_request_authorizes_verified_files_define_reality
+entrypoints:
+  - memory/INDEX.yaml
+  - memory/user/
+  - memory/projects/
+  - memory/patterns/
+  - candidate-memory/
+authority_order:
+  - current_user_request
+  - verified_current_files
+  - active_project_decisions
+  - explicit_user_preferences
+  - inferred_patterns_with_evidence
+  - conversation_summary
+  - old_history
+memory_types:
+  explicit_preference:
+    promotion: automatic_when_non_sensitive_and_explicit
+  project_decision:
+    promotion: automatic_when_confirmed_and_scoped
+  project_state:
+    promotion: require_current_file_evidence
+  inferred_preference:
+    promotion: candidate_until_repeated_or_confirmed
+  workflow_pattern:
+    promotion: candidate_until_repeated
+  conversation_summary:
+    promotion: optional_and_never_mandatory_context
+required_fields:
+  - id
+  - type
+  - subject
+  - value
+  - scope
+  - status
+  - confidence
+  - source
+  - evidence_count
+  - sensitive
+  - created_at
+  - updated_at
+status:
+  active:
+    use: current_memory
+  candidate:
+    use: not_authoritative
+  replaced:
+    use: history_only
+  revoked:
+    use: never_as_current_truth
+  expired:
+    use: revalidate_before_use
+maintenance:
+  always_check_after_task: true
+  allowed_results:
+    - updated
+    - unchanged
+    - candidate
+    - replaced
+    - blocked_sensitive
+  flow:
+    - extract_candidate
+    - classify_sensitivity
+    - search_existing_subject_and_aliases
+    - compare_value_scope_and_source
+    - merge_replace_or_discard
+    - update_index
+    - validate_duplicates_conflicts_and_size
+safety:
+  never_store:
+    - passwords
+    - api_tokens
+    - private_keys
+    - customer_data
+    - unnecessary_personal_data
+    - raw_logs
+    - unredacted_sensitive_conversation
+  prediction:
+    allow:
+      - suggest_likely_preference
+      - choose_low_risk_defaults
+    never:
+      - expand_scope
+      - authorize_sensitive_action
+      - override_current_request
+      - claim_perfect_prediction
+economy:
+  - read_index_before_memory_files
+  - retrieve_only_matching_subjects
+  - do_not_load_archive_by_default
+  - do_not_write_when_result_is_unchanged
+  - keep_one_trackable_subject_per_file
+  - enforce_context_budget

@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "reset:next": "node scripts/reset-next-dev.mjs",
-    "predev": "node scripts/reset-next-dev.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

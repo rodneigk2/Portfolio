@@ -9,10 +9,10 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-body)"],
-        body: ["var(--font-body)"],
-        display: ["var(--font-display)"],
-        mono: ["var(--font-mono)"],
+        sans: ["var(--font-body)", "ui-sans-serif", "system-ui"],
+        body: ["var(--font-body)", "ui-sans-serif", "system-ui"],
+        display: ["var(--font-body)", "ui-sans-serif", "system-ui"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
     },
   },

@@ -1,0 +1,46 @@
+id: public_content_policy
+type: publication_boundary
+version: 0.9.0
+purpose: keep_public_artifacts_user_facing
+public_content:
+  - objective_and_scope
+  - installation_and_user_usage
+  - behavior_security_and_limits
+  - user_facing_cli_or_api_commands
+  - changelog_and_release_notes
+maintainer_only:
+  - roadmap_or_future_release_strategy
+  - publish_or_release_commands
+  - credentials_authentication_or_registry_steps
+  - maintainer_checklists
+  - internal_evolution_notes
+storage:
+  path: .maintainer/
+  public_package: forbidden
+rules:
+  - exclude_maintainer_only_content_from_readme_docs_and_packages
+  - keep_public_documentation_focused_on_current_user_value
+  - block_release_when_forbidden_content_or_paths_are_detected
+  - always_verify_public_documentation_and_descriptions_before_publish
+publication_readiness:
+  required_before_every_publish:
+    - current_version_present_in_changelog
+    - current_version_present_in_release_notes
+    - npm_pypi_and_readme_descriptions_are_synchronized
+    - canonical_github_npm_and_pypi_versions_are_synchronized
+    - package_cli_templates_and_distributed_yaml_versions_are_synchronized
+    - public_explanation_matches_current_behavior_and_limits
+  release_candidate_exception:
+    when: project_status_ends_with_candidate_version
+    allows:
+      - canonical_published_versions_may_still_reference_last_published_release
+    still_requires:
+      - package_cli_templates_and_distributed_yaml_versions_are_synchronized
+      - changelog_and_release_notes_match_candidate_version
+      - public_explanation_matches_current_behavior_and_limits
+  gate:
+    command: scripts/public_release_readiness_check.py
+    failure_effect: block_publish
+  package_content_gate:
+    command: scripts/package_content_version_check.py
+    failure_effect: block_publish

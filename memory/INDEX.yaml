@@ -1,0 +1,20 @@
+id: memory_index
+type: memory_index
+version: 0.9.0
+purpose: route_to_minimum_relevant_persistent_memory
+policy:
+  - read_only_matching_subjects
+  - do_not_load_archive_by_default
+  - current_request_overrides_memory
+  - verified_files_override_stale_memory
+entries: []
+areas:
+  user:
+    path: memory/user/
+  projects:
+    path: memory/projects/
+  patterns:
+    path: memory/patterns/
+  archive:
+    path: memory/archive/
+    read_by_default: false

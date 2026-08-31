@@ -1,0 +1,56 @@
+id: host_onboarding
+type: operational_rules
+version: 0.9.0
+purpose: request_consent_before_strengthening_project_local_host_rules
+principle: stronger_host_integration_requires_explicit_project_local_consent
+first_contact:
+  state: ai-protocol-onboarding/state.json
+  when_pending:
+    - read_only_ai_protocol_onboarding_notice
+    - explain_supported_hosts_and_limits
+    - request_one_of_four_declared_choices
+    - pass_exact_answer_to_setup_respond
+    - require_onboarding_verify_pass_before_continuing
+    - do_not_process_choice_as_test_data
+  when_completed:
+    - read_state_only_in_normal_operation
+    - do_not_read_notice_again
+    - run_compliance_only_when_host_missing_conflict_or_low_adherence_is_suspected
+    - run_repair_only_after_user_confirmation
+choices:
+  - accept_host_rules_and_real_tests
+  - accept_only_host_rules
+  - accept_only_real_tests
+  - decline_both
+baseline_trigger:
+  - AGENTS.md
+consented_host_rule_targets:
+  - CLAUDE.md
+  - GEMINI.md
+  - .github/copilot-instructions.md
+  - .cursor/rules/ai-execution-protocol.mdc
+safety:
+  - create_backup_before_existing_file_change
+  - preserve_existing_instructions
+  - reject_symbolic_link_targets
+  - rollback_all_host_file_changes_on_failure
+  - write_only_inside_project
+  - no_global_configuration
+  - no_extension_installation
+  - no_network
+  - system_and_host_rules_remain_higher_priority
+  - report_best_effort_not_guaranteed_enforcement
+economy:
+  normal_reads:
+    - ai-protocol-onboarding/state.json
+    - ai-protocol-feedback/consent.json
+  notice_only_when:
+    - status_pending
+  compliance_only_when:
+    - host_changed
+    - instruction_file_missing
+    - instruction_conflict_detected
+    - adherence_problem_suspected
+  after_completion:
+    - do_not_read_notice_again
+    - use_feedback_consent_only_for_post_task_hook

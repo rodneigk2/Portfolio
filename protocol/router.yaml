@@ -1,0 +1,193 @@
+id: protocol_router
+type: read_router
+version: 0.9.0
+purpose: choose_minimum_protocol_files_by_task
+default_read:
+  - fast-path.yaml
+  - route-packs.yaml
+routes:
+  simple_answer:
+    risk: 0
+    read:
+      - fast-path.yaml
+  status_version_check:
+    risk: 0
+    read:
+      - fast-path.yaml
+      - cost-quality-policy.yaml
+  small_fix:
+    risk: 1
+    read:
+      - validation-checklist.yaml
+  user_flow_bug:
+    risk: 2
+    read:
+      - context-compiler.yaml
+      - risk-levels.yaml
+      - mapping-checklists.yaml
+      - validation-checklist.yaml
+  refactor:
+    risk: 2
+    read:
+      - context-compiler.yaml
+      - mapping-checklists.yaml
+      - validation-checklist.yaml
+      - spec-driven.yaml
+  feature_or_spec:
+    risk: 2
+    read:
+      - context-compiler.yaml
+      - risk-levels.yaml
+      - mapping-checklists.yaml
+      - validation-checklist.yaml
+      - spec-driven.yaml
+  docs_update:
+    risk: 1
+    read:
+      - context-rules.yaml
+      - formatting-rules.yaml
+  public_artifact_review:
+    risk: 1
+    read:
+      - public-content-policy.yaml
+      - validation-checklist.yaml
+  host_onboarding:
+    risk: 1
+    read:
+      - host-onboarding.yaml
+      - validation-checklist.yaml
+  host_mcp_setup:
+    risk: 1
+    read:
+      - host-installation-readiness.yaml
+      - host-onboarding.yaml
+      - host-runtime-contract.yaml
+      - validation-checklist.yaml
+  database_or_data:
+    risk: 3
+    read:
+      - context-compiler.yaml
+      - risk-levels.yaml
+      - mapping-checklists.yaml
+      - validation-checklist.yaml
+      - spec-driven.yaml
+  auth_security_secret:
+    risk: 3
+    read:
+      - context-compiler.yaml
+      - risk-levels.yaml
+      - mapping-checklists.yaml
+      - validation-checklist.yaml
+      - spec-driven.yaml
+  deploy_or_production:
+    risk: 3
+    read:
+      - context-compiler.yaml
+      - risk-levels.yaml
+      - validation-checklist.yaml
+      - context-rules.yaml
+      - spec-driven.yaml
+  evaluate_response:
+    read:
+      - ../behavior/contract.yaml
+      - ../eval/rubric.yaml
+      - ../schema/evaluated-response.schema.json
+  behavior_evaluation:
+    risk: 1
+    read:
+      - ../behavior/contract.yaml
+      - ../behavior/audit-checklist.yaml
+      - ../eval/rubric.yaml
+      - ../dataset/README.md
+  create_or_edit_yaml:
+    read:
+      - formatting-rules.yaml
+      - ../schema/protocol-rule.schema.yaml
+  prompt_improvement:
+    read:
+      - prompt-economy.yaml
+  context_optimization:
+    read:
+      - persistent-context.yaml
+      - context-rules.yaml
+      - context-compiler.yaml
+      - context-budget.yaml
+  memory_update:
+    risk: 1
+    read:
+      - adaptive-memory.yaml
+      - context-budget.yaml
+      - validation-checklist.yaml
+  memory_conflict_or_replacement:
+    risk: 2
+    read:
+      - adaptive-memory.yaml
+      - context-compiler.yaml
+      - validation-checklist.yaml
+  selective_validation:
+    risk: 1
+    read:
+      - selective-validation.yaml
+  capability_selection:
+    risk: adaptive
+    read:
+      - capability-router.yaml
+      - capability-gate.yaml
+      - enforcement-gateway.yaml
+      - context-budget.yaml
+  enforcement_gateway:
+    risk: adaptive
+    read:
+      - capability-router.yaml
+      - capability-gate.yaml
+      - enforcement-gateway.yaml
+      - ../capabilities/exposure-policy.yaml
+      - context-budget.yaml
+  runtime_adapter:
+    risk: adaptive
+    read:
+      - runtime-adapter.yaml
+      - enforcement-gateway.yaml
+      - capability-gate.yaml
+      - context-budget.yaml
+  intelligence_selection:
+    risk: adaptive
+    read:
+      - intelligence-router.yaml
+      - context-budget.yaml
+  cost_quality_optimization:
+    risk: adaptive
+    read:
+      - cost-quality-policy.yaml
+      - intelligence-router.yaml
+      - context-budget.yaml
+      - selective-validation.yaml
+  dataset_preparation:
+    risk: 1
+    read:
+      - ../behavior/contract.yaml
+      - ../behavior/audit-checklist.yaml
+      - prompt-economy.yaml
+      - ../dataset/README.md
+  real_run_collection:
+    risk: 2
+    read:
+      - real-run-consent.yaml
+      - validation-checklist.yaml
+      - ../schema/real-run.schema.json
+rules:
+  - start_with_default_read
+  - choose_one_route_if_task_type_is_clear
+  - read_route_pack_before_full_route_files_when_available
+  - expand_from_route_pack_only_when_needed
+  - apply_context_budget_to_selected_route
+  - retrieve_only_matching_memory_subjects
+  - select_capabilities_before_loading_skill_or_connecting_mcp
+  - require_capability_gate_before_invocation
+  - use_enforcement_gateway_when_tool_use_has_risk_or_side_effect
+  - use_runtime_adapter_for_host_or_agent_framework_integrations
+  - route_model_or_reasoning_effort_by_risk_and_complexity
+  - use_behavior_contract_when_task_is_about_adherence_dataset_or_training
+  - if_route_unclear_read_risk_levels_then_choose_route
+  - do_not_read_docs_unless_protocol_is_insufficient
+  - do_not_read_cases_unless_testing_or_comparing_behavior

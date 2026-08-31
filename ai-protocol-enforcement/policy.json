@@ -1,0 +1,67 @@
+{
+  "mode": "best_effort_or_enforced_by_host",
+  "default": {
+    "max_external_capabilities": 0,
+    "allowed_operations": ["read"],
+    "confirmation_required_for": ["write", "publish", "destructive"]
+  },
+  "risk_levels": {
+    "0": {
+      "max_external_capabilities": 0,
+      "allowed_operations": ["read"],
+      "confirmation_required_for": []
+    },
+    "1": {
+      "max_external_capabilities": 1,
+      "allowed_operations": ["read", "write"],
+      "confirmation_required_for": ["write"]
+    },
+    "2": {
+      "max_external_capabilities": 3,
+      "allowed_operations": ["read", "write"],
+      "confirmation_required_for": ["write"]
+    },
+    "3": {
+      "max_external_capabilities": 3,
+      "allowed_operations": ["read", "write", "publish", "destructive"],
+      "confirmation_required_for": ["write", "publish", "destructive"],
+      "require_explicit_scope": true
+    }
+  },
+  "capabilities": {
+    "built_in_reasoning": {
+      "operations": ["read"],
+      "external": false
+    },
+    "local_search": {
+      "operations": ["read"],
+      "external": false
+    },
+    "local_files": {
+      "operations": ["read", "write"],
+      "external": false
+    },
+    "focused_skill": {
+      "operations": ["read"],
+      "external": true
+    },
+    "targeted_mcp": {
+      "operations": ["read", "write"],
+      "external": true
+    },
+    "publish_service": {
+      "operations": ["publish"],
+      "external": true
+    },
+    "shell": {
+      "operations": ["read", "write", "destructive"],
+      "external": false,
+      "confirmation_required_for": ["write", "destructive"]
+    },
+    "browser": {
+      "operations": ["read", "write"],
+      "external": true,
+      "confirmation_required_for": ["write"]
+    }
+  }
+}

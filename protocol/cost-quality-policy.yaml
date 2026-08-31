@@ -1,0 +1,163 @@
+id: cost_quality_policy
+type: operational_rules
+version: 0.9.0
+purpose: reduce_ai_cost_without_reducing_required_quality
+principle: optimize_spend_only_after_required_context_risk_and_validation_are_preserved
+maturity:
+  current_stage: measured_protocol_mvp
+  aligned_with:
+    - route_based_context_retrieval
+    - risk_based_intelligence_selection
+    - selective_validation
+    - capability_least_privilege
+    - executable_gateway_when_host_supports_it
+  not_yet_mature:
+    - provider_prompt_cache_metrics
+    - semantic_cache_invalidation
+    - batch_eval_cost_tracking
+    - production_quality_cost_dashboard
+decision_order:
+  - classify_risk
+  - detect_status_version_fast_lane
+  - define_quality_bar
+  - select_minimum_context_route
+  - choose_cheapest_sufficient_intelligence
+  - select_minimum_capabilities
+  - validate_by_blast_radius
+  - measure_cost_and_quality
+status_version_fast_lane:
+  use_when_user_asks:
+    - is_it_updated
+    - check_whether_aep_update_is_needed
+    - is_there_anything_to_push
+    - check_version
+    - check_sync_status
+  question_only:
+    - do_not_use_for_push_publish_pull_or_update_actions
+    - do_not_use_when_user_says_to_execute_remote_or_write_action
+    - convert_to_higher_risk_route_when_question_becomes_action
+  minimum_commands:
+    - ai-protocol --version
+    - git status -sb
+    - git rev-list --left-right --count origin/main...HEAD
+  stop_when_all_true:
+    - installed_or_local_version_matches_expected_current_version
+    - worktree_has_no_relevant_dirty_changes
+    - branch_is_not_ahead_or_behind_remote
+    - no_error_or_user_reported_failure_is_present
+  do_not_run_by_default:
+    - setup-local
+    - doctor
+    - strict-status
+    - compliance
+    - feedback-status
+    - host_readiness
+    - preflight
+    - run-checks
+    - release_check
+  escalate_only_when:
+    - version_is_behind_or_unknown
+    - worktree_dirty_changes_affect_aep_files
+    - remote_ahead_or_push_action_is_requested
+    - prior_command_failed
+    - user_explicitly_requests_full_scan_release_publish_or_100_percent_validation
+    - security_host_or_publication_claim_must_be_verified
+  delivery:
+    - report_fast_lane_used
+    - report_checks_run
+    - report_why_full_maintenance_was_skipped_or_why_it_was_needed
+quality_bar:
+  never_reduce:
+    - security
+    - correctness
+    - tenant_or_data_isolation
+    - explicit_user_scope
+    - required_validation
+  require:
+    - risk_level_matches_evidence
+    - context_is_sufficient_for_action
+    - validation_proves_changed_behavior
+    - residual_risk_is_reported
+cost_levers:
+  context:
+    use:
+      - route_packs_before_full_route_files
+      - context_budget_by_risk
+      - snippets_before_full_files
+      - memory_index_before_memory_files
+    avoid:
+      - loading_all_docs_or_memory
+      - treating_context_map_as_truth_without_verification
+  intelligence:
+    use:
+      - minimal_for_level_0
+      - standard_for_focused_level_1
+      - deep_only_for_level_2_or_failed_validation
+      - critical_only_for_level_3_or_high_blast_radius
+    escalate_when:
+      - ambiguity_blocks_safe_action
+      - validation_fails
+      - context_conflict_detected
+      - external_current_data_is_required
+  prompt_cache:
+    use_when:
+      - host_or_provider_exposes_cache_metrics
+      - repeated_static_protocol_prefix_exists
+      - dynamic_request_content_can_stay_at_end
+    measure:
+      - cached_input_tokens
+      - cache_hit_rate
+      - latency
+    avoid:
+      - changing_tool_schemas_or_static_rules_without_need
+      - moving volatile_user_data_into_static_prefix
+  response_or_semantic_cache:
+    use_when:
+      - answers_are_repetitive
+      - source_data_has_clear_version_or_expiration
+      - wrong_cached_answer_has_low_impact
+    require:
+      - similarity_threshold
+      - source_ids
+      - expires_at_or_invalidation_rule
+      - bypass_for_code_security_or_current_state
+  batch:
+    use_when:
+      - eval_or_benchmark_is_not_time_sensitive
+      - many_independent_items_share_schema
+    avoid_for:
+      - interactive_debugging
+      - urgent_user_flow_fixes
+      - tasks_requiring_immediate_feedback
+metrics:
+  required_when_measuring:
+    - risk_level
+    - route
+    - files_read_count
+    - estimated_input_tokens
+    - estimated_output_tokens
+    - validation_result
+    - quality_score_or_pass_fail
+  provider_when_available:
+    - cached_input_tokens
+    - cache_hit_rate
+    - latency_ms
+    - model_or_reasoning_effort
+acceptance:
+  economy_is_valid_only_if:
+    - quality_bar_passed
+    - validation_was_not_reduced_below_required_level
+    - cost_delta_is_measured_or_marked_unmeasured
+    - residual_risk_is_explicit
+  reject_optimization_when:
+    - cost_saving_depends_on_ignoring_required_context
+    - cache_can_serve_stale_or_sensitive_content
+    - model_downgrade_fails_eval_or_validation
+    - tool_restriction_blocks_required_validation
+delivery:
+  include_when_relevant:
+    - cost_levers_used
+    - quality_bar_result
+    - measured_or_estimated_cost_delta
+    - validation_result
+    - residual_risk

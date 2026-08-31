@@ -1,0 +1,93 @@
+id: host_runtime_contract
+type: operational_rules
+version: 0.9.0
+purpose: contract_for_future_aep_host_that_controls_agents_and_tools
+principle: host_controls_tool_exposure_and_calls_gateway_before_execution
+host_must:
+  - hide_direct_tool_bypass_from_agents
+  - expose_only_selected_capabilities_per_task
+  - call_preflight_before_level_1_plus_action
+  - call_check_call_before_every_tool_invocation
+  - call_run_checks_before_delivery
+  - record_trace_events_without_full_logs_or_secrets
+  - require_confirmation_for_sensitive_operations
+agent_roles:
+  router:
+    purpose: classify_risk_select_route_and_quality_bar
+    default_model: cheap_or_standard
+    tools: []
+  planner:
+    purpose: map_scope_context_capabilities_and_validation
+    default_model: standard
+    tools:
+      - read_only_search
+  executor:
+    purpose: perform_allowed_file_or_command_actions
+    default_model: standard
+    tools:
+      - gated_files
+      - gated_shell
+  validator:
+    purpose: verify_changed_behavior_and_evidence
+    default_model: cheap_or_standard
+    tools:
+      - gated_shell
+      - read_only_search
+  security_reviewer:
+    purpose: review_level_2_plus_or_sensitive_changes
+    default_model: strong
+    tools:
+      - read_only_search
+cost_quality_policy:
+  first_reduce:
+    - context_loaded
+    - duplicate_tool_calls
+    - repeated_static_prompts
+  then_reduce:
+    - model_effort_for_low_risk_tasks
+  never_reduce:
+    - required_validation
+    - security_review_for_sensitive_scope
+    - tenant_or_data_isolation
+    - explicit_confirmation_for_sensitive_action
+escalate_model_when:
+  - risk_level_2_or_3
+  - validation_fails
+  - context_conflict_detected
+  - security_auth_data_or_deploy_scope
+  - user_flow_or_regression_risk
+tool_policy:
+  default: no_tools
+  read_only_tools:
+    allowed_after:
+      - risk_classified
+      - route_selected
+  write_tools:
+    allowed_after:
+      - plan_validated
+      - capability_selected
+      - call_allowed
+  sensitive_tools:
+    allowed_after:
+      - explicit_user_confirmation
+      - target_is_specific
+      - rollback_or_recovery_path_exists
+observability:
+  trace_required_for:
+    - preflight
+    - check_call
+    - tool_result
+    - validation
+    - run_checks
+  avoid_recording:
+    - source_file_content
+    - full_command_output
+    - secrets
+    - customer_data
+delivery:
+  include:
+    - effective_mode
+    - validation_summary
+    - blocked_tool_calls
+    - residual_risk
+    - next_safe_action

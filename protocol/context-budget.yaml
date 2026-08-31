@@ -1,0 +1,65 @@
+id: context_budget
+type: operational_rules
+version: 0.9.0
+purpose: limit_context_cost_without_trading_correctness_or_safety
+principle: budget_guides_reading_risk_can_justify_expansion
+levels:
+  level_0:
+    pack_first_tokens_est: 180
+    initial_tokens_est: 300
+    max_files_before_justification: 2
+  level_1:
+    pack_first_tokens_est: 450
+    initial_tokens_est: 1000
+    max_files_before_justification: 5
+  level_2:
+    pack_first_tokens_est: 900
+    initial_tokens_est: 4000
+    max_files_before_justification: 12
+  level_3:
+    pack_first_tokens_est: 1200
+    initial_tokens_est: 6000
+    mode: adaptive
+    max_files_before_justification: 20
+pack_first:
+  default: true
+  bootstrap_files:
+    - fast-path.yaml
+    - route-pack-index.yaml
+    - selected_route_block_from_route-packs.yaml
+  count_only_selected_pack:
+    - selected_route_pack
+    - matching_memory_index_entries
+    - capability_registry_entry_when_tool_needed
+  avoid_until_needed:
+    - full_route_files
+    - router_yaml
+    - context_budget_file_itself
+    - capability_router_and_gate
+    - intelligence_router
+    - generated_reports
+count:
+  - protocol_rules
+  - memory_entries
+  - project_docs
+  - code_snippets
+exclude:
+  - generated_reports_not_read
+  - files_only_listed_not_opened
+expansion_requires:
+  - unresolved_risk
+  - missing_dependency
+  - unclear_scope
+  - insufficient_snippet
+  - validation_gap
+stop_when:
+  - objective_is_clear
+  - target_is_identified
+  - risk_is_classified
+  - validation_plan_is_clear
+  - no_unresolved_gap_requires_more_context
+delivery:
+  report_when_exceeded:
+    - initial_budget
+    - estimated_context_used
+    - expansion_reason

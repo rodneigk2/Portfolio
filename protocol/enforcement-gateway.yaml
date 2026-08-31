@@ -1,0 +1,194 @@
+id: enforcement_gateway
+type: operational_rules
+version: 0.9.0
+purpose: executable_boundary_for_tool_and_capability_use
+principle: enforce_outside_the_model_when_host_can_call_local_gate
+boundary:
+  framework_can:
+    - define_executable_policy
+    - validate_capability_plan_before_tool_use
+    - block_unplanned_or_unconfirmed_tool_call_when_host_invokes_gateway
+    - classify_best_effort_vs_enforced_mode
+    - wrap_local_commands_with_runner_hooks_or_ci_when_user_consents
+    - provide_proxy_entrypoints_for_tools_when_host_supports_custom_tools
+    - provide_runtime_adapter_contract_for_host_integrations
+  host_must:
+    - call_gateway_before_tool_or_mcp_invocation
+    - hide_or_disable_unselected_tools_for_physical_enforcement
+    - enforce_sandbox_and_runtime_permissions
+    - avoid_exposing_bypass_paths_to_the_model_for_strict_enforcement
+control_layers:
+  instruction:
+    mode: best_effort
+    mechanism:
+      - AGENTS_md
+      - IDE_instruction_blocks
+      - onboarding_notice
+    can:
+      - improve_model_adherence
+      - mark_protocol_violation_after_the_fact
+    cannot:
+      - physically_block_host_tool_use
+  local_runner:
+    mode: enforced_for_wrapped_commands
+    mechanism:
+      - ai_protocol_run
+      - ai_protocol_run_auto
+      - package_script_wrappers
+    can:
+      - block_command_when_plan_or_report_is_invalid
+      - require_validation_evidence_for_level_1_plus
+    cannot:
+      - block_commands_executed_outside_runner
+  hooks_and_ci:
+    mode: enforced_at_boundary
+    mechanism:
+      - git_hooks
+      - pre_push_checks
+      - ci_checks
+    can:
+      - block_commit_push_or_release_boundary
+      - catch_missing_validation_before_publication
+    cannot:
+      - prevent_all_intermediate_bad_edits
+  gateway_proxy:
+    mode: strongest_when_host_integrates
+    mechanism:
+      - validate_plan
+      - check_call
+      - ai_protocol_proxy_call
+      - custom_tool_or_mcp_proxy
+      - runtime_adapter_lifecycle
+    can:
+      - block_unplanned_tool_or_mcp_call_before_execution
+      - enforce_selected_capability_subset
+    cannot:
+      - block_direct_tool_access_exposed_outside_proxy
+  custom_host:
+    mode: physical_runtime_enforcement
+    mechanism:
+      - host_runtime_calls_gateway_before_every_tool
+      - host_hides_unselected_tools
+      - host_enforces_permissions
+    can:
+      - make_gateway_mandatory_for_tool_access
+      - remove_bypass_paths_from_model_runtime
+    cannot:
+      - guarantee_model_reasoning_correctness_without_validation
+guarantee_modes:
+  best_effort:
+    meaning: instructions guide behavior but do not physically block tools
+    limit: direct host tools remain available if the host exposes them
+  wrapped_enforced:
+    meaning: runner_hooks_ci_gateway_proxy_or_adapter_paths_can_block
+    limit: commands_or_tools_outside_those_paths_are_not_blocked
+  proxy_enforced:
+    meaning: tool_calls_through_proxy_are_gateway_checked_before_execution
+    limit: direct_tool_bypass_must_be_hidden_for_strong_guarantee
+  host_enforced:
+    meaning: host_calls_gateway_before_every_tool_and_hides_bypass
+    limit: still_requires_validation_for_model_reasoning_correctness
+observability:
+  trace_file: .ai-protocol-run/trace.jsonl
+  command: ai-protocol trace-report <project>
+  html_command: ai-protocol trace-report <project> --html
+  records:
+    - preflight_status
+    - check_call_status
+    - command_exit_code
+    - run_checks_status
+    - risk_level_when_available
+  avoids:
+    - full_command_output
+    - source_file_content
+    - secrets_or_environment_dump
+  purpose:
+    - prove_which_control_boundary_ran
+    - summarize_failures_for_debugging
+    - support_route_and_capability_compliance_reports
+installed_files:
+  gateway: ai-protocol-enforcement/gateway.py
+  policy: ai-protocol-enforcement/policy.json
+commands:
+  strict_status:
+    example: ai-protocol strict-status C:\caminho\projeto
+    purpose: report_which_guarantees_are_executable_in_target_project
+    must_report:
+      - effective_mode
+      - residual_risks
+      - recommended_controls
+  preflight:
+    example: ai-protocol preflight C:\caminho\projeto --plan plan.json
+    blocks_when:
+      - installation_invalid
+      - gateway_missing
+      - plan_invalid
+  run_checks:
+    example: ai-protocol run-checks C:\caminho\projeto --plan plan.json --report report.json
+    blocks_when:
+      - preflight_fails
+      - validation_evidence_missing_for_level_1_plus
+      - impact_scope_missing_for_level_2_plus
+      - sensitive_confirmation_missing_for_level_3
+  run:
+    example: ai-protocol run --target C:\caminho\projeto --plan plan.json --call call.json --report report.json --npm-script test
+    purpose: local_mandatory_runner_for_preflight_call_check_execution_and_run_checks
+  validate_plan:
+    example: python ai-protocol-enforcement/gateway.py validate-plan --input plan.json
+    blocks_when:
+      - invalid_risk_level
+      - missing_capability_plan_for_level_2_or_3
+      - external_capability_budget_exceeded
+      - explicit_scope_missing_for_level_3
+  check_call:
+    example: python ai-protocol-enforcement/gateway.py check-call --input call.json
+    blocks_when:
+      - capability_not_selected
+      - unknown_capability
+      - operation_not_supported
+      - operation_not_allowed_for_risk
+      - confirmation_required
+      - sensitive_operation_requires_target
+  proxy_call:
+    example: ai-protocol proxy-call C:\caminho\projeto --input proxy-call.json
+    purpose: gateway_checked_local_tool_proxy_for_hosts_that_can_call_custom_tools
+    input_requires:
+      - plan
+      - call
+      - npm_script_name_from_package_json
+    blocks_when:
+      - check_call_fails
+      - npm_script_missing_or_invalid
+      - arbitrary_command_input_present
+economy:
+  normal_read:
+    - protocol/route-packs.yaml
+    - ai-protocol-enforcement/policy.json only_when_gateway_needed
+  avoid:
+    - loading_all_skills_or_mcp_descriptions
+    - invoking_gateway_for_level_0_direct_answer
+    - reading_logs_or_feedback_records
+rules:
+  - strongest_control_is_gateway_or_runner_at_execution_boundary
+  - instruction_only_installation_must_be_reported_as_best_effort
+  - strict_guarantee_requires_cli_or_host_to_call_preflight_before_action
+  - strict_guarantee_requires_cli_or_host_to_call_run_checks_before_delivery
+  - strict_status_must_surface_host_direct_tool_bypass_when_host_is_not_enforced
+  - local_guarantee_requires_user_to_run_task_through_ai_protocol_run
+  - runner_guarantee_applies_only_to_commands_executed_through_runner
+  - hook_or_ci_guarantee_applies_only_at_commit_push_or_release_boundary
+  - proxy_guarantee_applies_only_when_direct_tool_bypass_is_not_exposed
+  - proxy_call_executes_only_after_gateway_allows_the_call
+  - runtime_adapter_calls_gateway_before_declaring_enforced_mode
+  - trace_records_control_events_without_collecting_full_logs
+  - use_gateway_for_level_2_or_3_tool_use_when_available
+  - use_gateway_for_any_write_publish_destructive_operation
+  - tool_call_allowed_only_when_selected_in_plan
+  - sensitive_operation_requires_explicit_target_and_confirmation
+  - gateway_allowed_is_not_model_correctness_claim
+  - missing_gateway_means_best_effort_not_enforced
+delivery:
+  include_when_used:
+    - enforcement_mode
+    - gateway_status
+    - blocked_reason_if_any

@@ -1,0 +1,71 @@
+id: protocol_index
+type: index
+format: yaml
+protocol_version: 0.9.0
+purpose: ai_operational_rules
+source_docs: ../docs
+constraints:
+  max_lines_per_file: 400
+  ai_first_readability: true
+  compact_rules: true
+files:
+  - path: fast-path.yaml
+    purpose: minimum_rules_to_start_any_task
+  - path: route-pack-index.yaml
+    purpose: compact_route_choice_before_full_router_or_all_packs
+  - path: router.yaml
+    purpose: choose_minimum_files_to_read_by_task
+  - path: route-packs.yaml
+    purpose: compact_first_read_before_full_route_files
+  - path: modes.yaml
+    purpose: choose_fast_balanced_or_strict_behavior
+  - path: execution-rules.yaml
+    purpose: execution_flow_and_core_behavior
+  - path: risk-levels.yaml
+    purpose: risk_classification_and_confirmation
+  - path: mapping-checklists.yaml
+    purpose: pre_change_maps_by_risk
+  - path: validation-checklist.yaml
+    purpose: validation_and_final_delivery
+  - path: selective-validation.yaml
+    purpose: choose_smallest_sufficient_validation
+  - path: context-rules.yaml
+    purpose: context_window_file_size_memory
+  - path: context-compiler.yaml
+    purpose: compile_minimum_context_package_and_canonical_state
+  - path: context-budget.yaml
+    purpose: enforce_context_cost_limits_by_risk
+  - path: persistent-context.yaml
+    purpose: progressive_context_retrieval_with_aliases
+  - path: adaptive-memory.yaml
+    purpose: maintain_verified_user_and_project_memory
+  - path: capability-router.yaml
+    purpose: select_minimum_skills_mcps_and_tools_by_value_cost_and_risk
+  - path: capability-gate.yaml
+    purpose: require_plan_before_capability_use_and_audit_after_use
+  - path: enforcement-gateway.yaml
+    purpose: executable_policy_for_tool_calls_when_host_supports_enforcement
+  - path: runtime-adapter.yaml
+    purpose: lifecycle_contract_for_host_and_agent_framework_integrations
+  - path: host-runtime-contract.yaml
+    purpose: contract_for_future_host_that_controls_agents_tools_cost_and_safety
+  - path: intelligence-router.yaml
+    purpose: choose_model_reasoning_effort_by_risk_and_complexity
+  - path: cost-quality-policy.yaml
+    purpose: reduce_ai_cost_without_reducing_required_quality
+  - path: ../behavior/contract.yaml
+    purpose: define_observable_behavior_for_agent_adherence
+  - path: ../behavior/audit-checklist.yaml
+    purpose: final_self_audit_for_agent_adherence
+  - path: formatting-rules.yaml
+    purpose: ai_readable_file_format
+  - path: prompt-economy.yaml
+    purpose: improve_prompts_without_token_bloat
+  - path: spec-driven.yaml
+    purpose: use_light_or_full_specs_only_when_they_reduce_risk
+  - path: real-run-consent.yaml
+    purpose: collect_real_user_tests_with_explicit_local_consent
+  - path: public-content-policy.yaml
+    purpose: keep_public_artifacts_free_of_maintainer_only_instructions
+  - path: host-onboarding.yaml
+    purpose: consented_first_contact_strengthening_of_project_host_rules

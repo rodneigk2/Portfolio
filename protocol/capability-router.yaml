@@ -1,0 +1,123 @@
+id: capability_router
+type: operational_rules
+version: 0.9.0
+purpose: select_only_necessary_skills_mcps_and_tools
+principle: minimum_capability_set_must_preserve_required_quality
+platform_boundary:
+  can_control:
+    - selection
+    - instruction_loading
+    - invocation
+    - operation_scope
+  cannot_guarantee:
+    - physical_unloading_of_host_exposed_tools
+    - revocation_of_platform_permissions
+  rule: exposed_capability_must_remain_unused_until_selected
+entrypoint:
+  registry: capabilities/registry.yaml
+selection_flow:
+  - classify_task_and_risk
+  - define_required_outcomes_and_operations
+  - inspect_available_capability_metadata
+  - prefer_existing_local_capability
+  - select_smallest_set_covering_required_outcomes
+  - add_dependency_only_when_selected_capability_requires_it
+  - verify_permissions_confirmation_and_validation
+  - stop_discovery_when_coverage_is_complete
+capability_types:
+  - built_in_reasoning
+  - local_tool
+  - skill
+  - mcp
+  - remote_service
+operations:
+  read:
+    effect: none_or_read_only
+  write:
+    effect: state_change
+  publish:
+    effect: external_release
+  destructive:
+    effect: irreversible_or_high_impact
+risk_policy:
+  level_0:
+    external_capability_budget: 0
+    allow:
+      - built_in_reasoning
+    expand_when:
+      - direct_answer_requires_verified_current_data
+  level_1:
+    external_capability_budget: 1
+    prefer:
+      - local_read
+      - focused_skill
+  level_2:
+    external_capability_budget: 3
+    prefer:
+      - specialized_skill
+      - targeted_mcp
+      - local_validation
+  level_3:
+    external_capability_budget: 3
+    principle: higher_risk_means_stricter_permissions_not_more_tools
+    require:
+      - least_privilege
+      - explicit_operation_scope
+      - confirmation_before_sensitive_write_publish_or_destructive
+      - validation_before_and_after
+cost_model:
+  dimensions:
+    - context_tokens
+    - latency
+    - remote_calls
+    - permission_scope
+    - side_effect_risk
+  choose_when:
+    - required_outcome_is_covered
+    - expected_quality_gain_exceeds_incremental_cost
+  never_trade:
+    - correctness
+    - security
+    - required_validation
+    - current_information_when_task_depends_on_it
+preference_order:
+  - built_in_reasoning
+  - existing_project_context
+  - local_read_tool
+  - focused_local_skill
+  - targeted_remote_read
+  - remote_write
+  - publish_or_destructive
+discovery:
+  do:
+    - use_known_available_capabilities_first
+    - search_for_tool_only_when_required_capability_is_missing
+    - load_skill_instructions_only_after_selection
+    - connect_mcp_only_for_matching_operation
+  avoid:
+    - loading_all_skills_before_selection
+    - listing_all_mcp_resources_without_need
+    - installing_adjacent_tools_not_required_by_task
+    - continuing_discovery_after_complete_coverage
+permission_policy:
+  - read_permission_does_not_imply_write_permission
+  - write_permission_does_not_imply_publish_permission
+  - memory_never_authorizes_sensitive_operation
+  - capability_availability_does_not_authorize_use
+  - current_user_request_defines_allowed_scope
+fallback:
+  when_required_coverage_is_missing:
+    - do_not_execute_incomplete_high_risk_workflow
+    - use_safe_local_partial_work_when_independently_valid
+    - report_missing_capability
+    - request_installation_or_user_action_only_when_required
+delivery:
+  include_when_capability_used:
+    - selected_capabilities
+    - selection_reason
+    - operation_scope
+    - confirmation_status_when_required
+    - validation
+  omit:
+    - full_available_capability_catalog
+    - rejected_capabilities_without_audit_need

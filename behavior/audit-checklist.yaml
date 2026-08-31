@@ -1,0 +1,15 @@
+id: behavior_audit_checklist
+type: behavior_audit
+version: 0.9.0
+purpose: final_self_audit_for_agent_adherence
+checks:
+  - proportionality
+  - context_economy
+  - capability_economy
+  - intelligence_budget
+  - permission_control
+  - validation_truth
+  - memory_safety
+delivery:
+  level_2_or_3: include_audit_result_validation_limit_and_residual_risk
+  level_0_or_1: keep_short_and_avoid_long_audit_table

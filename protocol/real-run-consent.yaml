@@ -1,0 +1,146 @@
+id: real_run_consent
+type: operational_rules
+version: 0.9.0
+purpose: collect_real_user_tests_with_explicit_local_consent
+status: active
+principle: explicit_consent_must_name_collection_and_conditional_local_return
+scope:
+  local_collection:
+    default: allowed_only_after_explicit_consent
+    storage_in_installed_project: ai-protocol-feedback/runs/
+    storage_in_framework_research: real-runs/local/
+    git_policy: ignored
+  publication:
+    default: forbidden
+    require:
+      - separate_export_action
+      - sanitized_preview
+      - explicit_share_consent
+  local_framework_return:
+    destination: real-runs/received/
+    default: disabled_without_valid_local_destination
+    require:
+      - sanitized_batch_validation
+      - consent_notice_explains_conditional_local_return
+      - configured_local_framework_importer
+      - unreviewed_status_after_import
+consent:
+  required_before_write:
+    - purpose
+    - fields_to_store
+    - storage_location
+    - retention_policy
+    - revocation_method
+  properties:
+    - explicit
+    - specific
+    - informed
+    - revocable
+    - not_inferred_from_framework_use
+retention:
+  installed_project: until_user_revocation_or_explicit_local_cleanup
+  local_framework: received_unreviewed_until_curated_or_revoked
+data_minimization:
+  default_content_mode: redacted
+  allow:
+    - project_label
+    - task_type
+    - risk_level
+    - outcome
+    - redacted_prompt
+    - redacted_response
+    - validation_summary
+    - content_hashes
+  block_or_redact:
+    - secrets
+    - tokens
+    - private_keys
+    - email_addresses
+    - user_home_paths
+    - customer_data
+    - unnecessary_personal_data
+collection_budget:
+  default_max_runs_per_protocol_version: 20
+  configurable_range:
+    min: 1
+    max: 1000
+  counters:
+    - recorded
+    - synced
+  reset_policy: new_protocol_version_gets_separate_counter
+  when_reached:
+    - stop_recording_for_that_protocol_version
+    - stop_syncing_for_that_protocol_version
+    - notify_user_once
+    - continue_normal_task_execution
+workflow:
+  - receive_initial_choice_from_host_onboarding
+  - persist_accept_or_decline_without_user_commands
+  - record_eligible_level_1_plus_tasks_after_completion
+  - show_created_run_path
+  - allow_revocation_by_run_id
+  - create_visible_outbox_only_when_local_return_is_configured_or_user_requests_preview
+  - validate_and_import_only_to_configured_local_framework
+  - report_sync_success_or_failure
+  - require_separate_consent_before_external_submission_or_publication
+  - aep_run_checks_records_eligible_successful_reports_when_consented
+eligible_tasks:
+  include:
+    - level_1_or_higher_technical_task
+    - validation_failure
+    - user_reports_regression
+    - explicit_user_feedback
+  exclude:
+    - level_0_direct_answer
+    - sensitive_task_without_safe_summary
+    - task_with_customer_data
+automation_boundary:
+  protocol_can:
+    - instruct_agent_to_check_consent
+    - record_after_each_eligible_task_in_aep_controlled_commands
+    - prepare_local_return_package
+    - invoke_local_framework_importer_when_configured_and_consented
+  host_must:
+    - execute_agent_instructions
+    - allow_local_script_execution
+  not_implemented:
+    - background_daemon
+    - automatic_capture_for_direct_host_tool_bypass
+    - remote_upload
+    - central_receiver
+    - internet_submission
+rules:
+  - no_background_collection
+  - no_consent_checkbox_preselected
+  - no_raw_content_by_default
+  - record_input_must_use_bounded_stdin
+  - no_remote_upload_in_local_recorder
+  - no_git_tracking_for_collected_runs
+  - consent_for_collection_does_not_authorize_publication
+  - consent_notice_must_explain_collection_and_conditional_local_return
+  - detected_sensitive_patterns_are_redacted_before_write
+  - source_hash_uses_only_sanitized_stored_content
+  - revocation_removes_run_outbox_and_known_received_copies
+  - revocation_removes_empty_received_batches_or_marks_partial_revocation
+  - collection_budget_must_be_checked_before_recording
+economy:
+  normal_task_reads:
+    - ai-protocol-feedback/consent.json
+  initial_notice_owner:
+    - ai-protocol-onboarding/NOTICE.md
+  read_full_protocol_only_when:
+    - consent_flow_changes
+    - sync_failure_needs_diagnosis
+    - user_requests_audit
+  delivery:
+    silent_on_success: true
+    notify:
+      - sync_failed
+      - limit_reached_first_time
+delivery:
+  include:
+    - run_id
+    - stored_fields
+    - redactions_applied
+    - local_path
+    - revocation_command
